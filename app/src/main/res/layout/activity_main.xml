@@ -4,15 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
+    <EditText
+        android:id="@+id/Username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="username" />
+
+    <EditText
+        android:id="@+id/Useraccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Useraccount" />
+
+    <EditText
+        android:id="@+id/Useremail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Useremail" />
+
+    <EditText
+        android:id="@+id/Userpassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Userpassword" />
+
+    <Button
+        android:id="@+id/send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="center"
+        android:text="Send" />
 
 </LinearLayout>
