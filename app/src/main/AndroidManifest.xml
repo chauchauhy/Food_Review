@@ -11,10 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".firebaseSDK.Firebase_Cloud_Message">
+        <activity android:name=".ShowRes"></activity>
+
+        <service android:name=".firebaseSDK.Firebase_Cloud_Message">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"></action>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
