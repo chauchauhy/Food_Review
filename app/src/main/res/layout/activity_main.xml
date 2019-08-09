@@ -13,6 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="username" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/war_name"
+        android:text="username is invalid"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        />
 
     <EditText
         android:id="@+id/Useraccount"
@@ -20,18 +28,42 @@
         android:layout_height="wrap_content"
         android:hint="Useraccount" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/war_ac"
+        android:text="account is invalid"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        />
+
     <EditText
         android:id="@+id/Useremail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Useremail" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/war_email"
+        android:text="email is invalid"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        />
 
     <EditText
         android:id="@+id/Userpassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Userpassword" />
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/war_pa"
+        android:text="password is invalid"
+        android:textColor="@color/red"
+        android:visibility="gone"
+        />
     <Button
         android:id="@+id/send"
         android:layout_width="wrap_content"

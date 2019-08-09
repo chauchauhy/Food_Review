@@ -20,10 +20,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.example.initapp.SetUp.url_RES;
+import static com.example.initapp.SetUp.url_all_get;
+
 public class ShowRes extends AppCompatActivity {
     RecyclerView recyclerView;
-    static String url_RES = "restaurant.php";
-    static String url_all_get = "http://localhost:8080/intern_app/get/";
     public Context context;
     public RequestQueue requestQueue;
     public StringRequest stringRequest;
@@ -61,23 +62,38 @@ public class ShowRes extends AppCompatActivity {
         }
     }
 
-    private void volley_get(String urll){
-        context = this;
-        requestQueue = Volley.newRequestQueue(context);
-        stringRequest = new StringRequest(urll, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.i("responseforres", response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("responseforres", error.toString());
-            }
-        });
-        requestQueue.add(stringRequest);
-    }
-
+//    private void volley_get(String urll){
+//        context = this;
+//        requestQueue = Volley.newRequestQueue(context);
+//        stringRequest = new StringRequest(urll, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.i("responseforres", response);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.i("responseforres", error.toString());
+//            }
+//        });
+//        requestQueue.add(stringRequest);
+//    }
+public void volley_get(String urlll){
+    context = this;
+    requestQueue = Volley.newRequestQueue(ShowRes.this);
+    stringRequest = new StringRequest(urlll, new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            Log.i("responseforres", response);
+        }
+    }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+               Log.i("responseforres", error.toString());
+        }
+    });
+    requestQueue.add(stringRequest);
+}
 
     private void jsontoarr(String json){
         try {
