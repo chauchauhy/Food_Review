@@ -47,12 +47,9 @@ public class ShowRes extends AppCompatActivity {
 
     private void read(){
         String ur  = url_all_get+url_RES;
-        Log.i("urrrrr", ur);
         g get = new g();
         get.execute(ur);
-
     }
-
     private class g extends AsyncTask<String, Void, String>{
 
         @Override
@@ -80,7 +77,7 @@ public class ShowRes extends AppCompatActivity {
 //    }
 public void volley_get(String urlll){
     context = this;
-    requestQueue = Volley.newRequestQueue(ShowRes.this);
+    requestQueue = Volley.newRequestQueue(context);
     stringRequest = new StringRequest(urlll, new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
