@@ -17,6 +17,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,10 +35,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.example.initapp.SetUp.url_User;
 import static com.example.initapp.SetUp.url_all_get;
+import static com.example.initapp.SetUp.url_all_post;
 
 public class MainActivity extends AppCompatActivity {          //sign page
     EditText username, useraccount, userpassword, useremail;
@@ -58,13 +75,16 @@ public class MainActivity extends AppCompatActivity {          //sign page
         setContentView(R.layout.activity_main);
         initui(); //
         read();
+
+        Timer timer = new Timer();
+        timer.schedule(new Timer_up(), 5000, 2000);
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (chknull()) {
-//                    if (doubChk()) {
+                if (chknull()&&(!chkexist())) {
+                    post();
                     startActivity(new Intent(MainActivity.this, ShowRes.class));
-//                    }
                 }
 
 
@@ -77,6 +97,16 @@ public class MainActivity extends AppCompatActivity {          //sign page
                 return true;
             }
         });
+    }
+
+    private Boolean chkexist() {
+        boolean chk = false;
+        for (int i = 0 ;i < users.size(); i++) {
+            if (username.getText().toString().trim().equals(users.get(i).getUserName())||useremail.getText().toString().trim().equals(users.get(i).getUserEmail())||useraccount.getText().toString().trim().equals(users.get(i).getUserAccount())){
+                chk=true;
+            }
+        }
+        return chk;
     }
 
     private void initui() {
@@ -97,6 +127,16 @@ public class MainActivity extends AppCompatActivity {          //sign page
         get.execute(url_all_get + url_User);
     }
 
+    private void post() {
+        p posts = new p();
+        String po = "User_Name=" + username.getText().toString().trim() + "&"
+                + "User_Account=" + useraccount.getText().toString().trim() + "&"
+                + "User_Password=" + userpassword.getText().toString().trim() + "&"
+                + "User_Email= " + useremail.getText().toString().trim() + "&" +
+                "User_Login_Method=Email&User_level=member";
+        Log.i("responsea", po);
+        posts.execute(url_all_post + url_User, po);
+    }
 
     private void noitication() {
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -133,29 +173,29 @@ public class MainActivity extends AppCompatActivity {          //sign page
         if (username.getText().toString().trim().length() < 3) {
             war_name.setVisibility(View.VISIBLE);
             boolean_result = false;
-        }else {
+        } else {
             war_name.setVisibility(View.GONE);
         }
         if (useraccount.getText().toString().trim().length() < 5) {
             war_ac.setVisibility(View.VISIBLE);
             boolean_result = false;
-        }else {
+        } else {
             war_ac.setVisibility(View.GONE);
         }
         if (userpassword.getText().toString().trim().length() < 5) {
             war_pw.setVisibility(View.VISIBLE);
             boolean_result = false;
-        }else{
+        } else {
             war_pw.setVisibility(View.GONE);
         }
         if (!(useremail.getText().toString().trim().length() > 7 && useremail.getText().toString().trim().contains("@") && useremail.getText().toString().trim().contains(".com"))) {            //check email formal
             war_email.setVisibility(View.VISIBLE);
             boolean_result = false;
-        }else {
+        } else {
             war_email.setVisibility(View.GONE);
         }
-        if(username.getText().toString().trim().length() > 3 &&  useraccount.getText().toString().trim().length() > 5 &&  userpassword.getText().toString().trim().length() > 5 && useremail.getText().toString().trim().length() > 7
-                && useremail.getText().toString().trim().contains("@") && useremail.getText().toString().trim().contains(".com") ){
+        if (username.getText().toString().trim().length() > 3 && useraccount.getText().toString().trim().length() > 5 && userpassword.getText().toString().trim().length() > 5 && useremail.getText().toString().trim().length() > 7
+                && useremail.getText().toString().trim().contains("@") && useremail.getText().toString().trim().contains(".com")) {
             boolean_result = true;
         }
 
@@ -166,6 +206,16 @@ public class MainActivity extends AppCompatActivity {          //sign page
         @Override
         protected String doInBackground(String... strings) {
             volley_get(strings[0]);
+            return strings[0];
+        }
+    }
+
+    private class p extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+//            volley_post(strings[0]);
+            String rep = postHttpURLConnection(strings[0], strings[1]);
+            Log.i("responsea", rep);
             return strings[0];
         }
     }
@@ -189,7 +239,43 @@ public class MainActivity extends AppCompatActivity {          //sign page
         requestQueue.add(stringRequest);
     }
 
+    private void volley_post(String urll) {
+        context = this;
+        requestQueue = Volley.newRequestQueue(context);
+        stringRequest = new StringRequest(Request.Method.POST, urll, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("response", response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("error", error.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map map = new HashMap<String, String>();
+                String User_Account = useraccount.getText().toString().trim();
+                String User_Name = username.getText().toString().trim();
+                String User_Email = useremail.getText().toString().trim();
+                String User_Password = userpassword.getText().toString().trim();
+                map.put("User_Name", User_Name);
+                map.put("User_Account", User_Account);
+                map.put("User_Password", User_Password);
+                map.put("User_Email", User_Email);
+                map.put("User_Login_Method", "Email");
+                map.put("User_level", "User_level");
+                Log.i("maptoString", map.toString());
+                return map;
+
+
+            }
+        };
+    }
+
     private void JsontoArray(String json) {
+        Log.i("jsona", json);
         try {
             JSONObject root = new JSONObject(json);
             JSONArray jsonArray = root.getJSONArray("user");
@@ -217,14 +303,55 @@ public class MainActivity extends AppCompatActivity {          //sign page
         }
     }
 
-    private Boolean doubChk() {
-        boolean ck_res = false;
-        for (int i = 0; i < users.size(); i++) {
-            if ((username.getText().toString().trim() == users.get(i).getUserName())) {
+    private class Timer_up extends TimerTask {
+
+        @Override
+        public void run() {
+            read();
+        }
+    }
+
+    private String postHttpURLConnection(String urlStr, String postParams) {
+
+        String response = "";
+
+        InputStream inputStream = null;
+        HttpURLConnection urlConnection = null;
+
+        try {
+            URL url = new URL(urlStr);
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.connect();
+
+            OutputStream outputStream = urlConnection.getOutputStream();
+            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+            dataOutputStream.writeBytes(postParams);
+
+            dataOutputStream.flush();
+            dataOutputStream.close();
+
+            int responseCode = urlConnection.getResponseCode();
+
+            if ((responseCode == HttpURLConnection.HTTP_OK)) {
+                String line;
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                while ((line = bufferedReader.readLine()) != null) {
+                    response += line;
+
+                }
+
+            } else {
+                response = "";
+
 
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return ck_res;
+        return response;
+
     }
 
 }
