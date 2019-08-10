@@ -62,6 +62,7 @@ public class Home extends AppCompatActivity {
             volley_get(strings[0]);
             return strings[0];
         }
+
     }
 
     public void volley_get(String urlll){
