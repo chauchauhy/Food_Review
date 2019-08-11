@@ -1,8 +1,10 @@
 package com.example.initapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -11,12 +13,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.initapp.Custom_List.Cus_Home_Res_List;
 import com.example.initapp.model.Restaurant;
 import com.google.android.material.navigation.NavigationView;
 
@@ -30,7 +35,7 @@ import static android.util.Log.i;
 import static com.example.initapp.SetUp.url_RES;
 import static com.example.initapp.SetUp.url_all_get;
 
-public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerlayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView navigationView;
@@ -38,30 +43,29 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public Context context;
     public RequestQueue requestQueue;
     public StringRequest stringRequest;
-    ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+    private Cus_Home_Res_List cus_home_res_list;
+    public ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+    public ArrayList<Restaurant> clone_res = new ArrayList<Restaurant>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        mDrawerlayout = findViewById(R.id.drawer);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerlayout,R.string.open,R.string.close);
-        navigationView = findViewById(R.id.Nav_home);
-        mDrawerlayout.addDrawerListener(mToggle);
-        recyclerView = findViewById(R.id.recyclerView);
-        navigationView.setNavigationItemSelectedListener(this);
         read();
+        initui();
 
-        mToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
     }
-    private void read(){
-        String ur  = url_all_get+url_RES;
+
+
+    private void read() {
+        String ur = url_all_get + url_RES;
         g get = new g();
         get.execute(ur);
     }
+
     private class g extends AsyncTask<String, Void, String> {
 
         @Override
@@ -72,7 +76,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     }
 
-    public void volley_get(String urlll){
+    public void volley_get(String urlll) {
         context = this;
         requestQueue = Volley.newRequestQueue(context);
         stringRequest = new StringRequest(urlll, new Response.Listener<String>() {
@@ -90,54 +94,56 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         requestQueue.add(stringRequest);
     }
 
-    private void jsontoarr(String json){
-        i("jsona",json);
+    private void jsontoarr(String json) {
+        i("jsona", json);
         try {
             JSONObject root = new JSONObject(json);
-            JSONArray jsonArray =root.getJSONArray("restaurant");
+            JSONArray jsonArray = root.getJSONArray("restaurant");
 
-            for(int i = 0 ; i< jsonArray.length();i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject j = jsonArray.getJSONObject(i);
 
-                String  id = j.getString("Res_ID");
-                String  Res_Name = j.getString("Res_Name");
-                String  Res_Detail = j.getString("Res_Detail");
-                String  Res_Image = j.getString("Res_Image");
-                String  Res_Image2 = j.getString("Res_Image2");
-                String  Res_Image3 = j.getString("Res_Image3");
-                String  Res_Like = j.getString("Res_Like");
-                String  Res_Mark = j.getString("Res_Mark");
-                String  Res_Type = j.getString("Res_Type");
+                String id = j.getString("Res_ID");
+                String Res_Name = j.getString("Res_Name");
+                String Res_Detail = j.getString("Res_Detail");
+                String Res_Image = j.getString("Res_Image");
+                String Res_Image2 = j.getString("Res_Image2");
+                String Res_Image3 = j.getString("Res_Image3");
+                String Res_Like = j.getString("Res_Like");
+                String Res_Mark = j.getString("Res_Mark");
+                String Res_Type = j.getString("Res_Type");
 
-                Restaurant restaurant = new Restaurant(id,Res_Name,Res_Detail,Res_Image,Res_Image2,Res_Image3,Res_Like,Res_Mark,Res_Type);
-                Log.i("restau",restaurant.toString());
-                restaurants.add(restaurant);
+                Restaurant restaurant = new Restaurant(id, Res_Name, Res_Detail, Res_Image, Res_Image2, Res_Image3, Res_Like, Res_Mark, Res_Type);
+                Log.i("restau", restaurant.toString());
+                this.restaurants.add(restaurant);
             }
+            clone_res = restaurants;
+            cus_home_res_list = new Cus_Home_Res_List(Home.this,restaurants);
+            recyclerView = findViewById(R.id.recyclerView);
+            recyclerView.setAdapter(cus_home_res_list);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
+    private void initui(){
+        mDrawerlayout = findViewById(R.id.drawer);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerlayout, R.string.open, R.string.close);
+        navigationView = findViewById(R.id.Nav_home);
+        mDrawerlayout.addDrawerListener(mToggle);
+        navigationView.setNavigationItemSelectedListener(this);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
+//        cus_home_res_list = new Cus_Home_Res_List(Home.this,restaurants);
+//        recyclerView = findViewById(R.id.recyclerView);
+//        recyclerView.setAdapter(cus_home_res_list);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
     @Override
@@ -147,10 +153,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.signup:
                 startActivity(new Intent(Home.this, MainActivity.class));
                 break;

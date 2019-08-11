@@ -13,6 +13,7 @@
     <ImageView
         android:layout_width="112dp"
         android:id="@+id/firs_res_imaget"
+        android:scaleType="fitXY"
         android:layout_height="112dp" />
 
     <LinearLayout
@@ -23,16 +24,20 @@
         <TextView
             android:id="@+id/res_Name_home"
             android:layout_width="295dp"
+            android:textSize="20dp"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
             android:layout_height="71dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:id="@+id/res_detail"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:textSize="15dp"
             android:layout_height="43dp" />
     </LinearLayout>
 </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="30dp" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

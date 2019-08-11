@@ -11,19 +11,19 @@ import java.util.Set;
 
 public class SetUp extends AppCompatActivity {
 
-    static String url_RES = "restaurant.php";
-    static String url_all_get = "http://10.0.2.2:8080/intern_app/get/";
-    static String url_all_post = "http://10.0.2.2:8080/intern_app/post/";
-    static String url_all_image = "http://10.0.2.2:/intern_app/images/";
-    static String url_User = "user.php";
-    static String url_post = "post.php";
-    static String url_comment = "comment.php";
-    static String url_comment_res = "comment_res.php";
-    static String url_dishes = "dishes.php";
-    static String url_like = "like.php";
-    static String url_order= "order.php";
-    static String url_payment = "payment.php";
-    static String url_user_login_status = "user_login_status.php";
+    public static String url_RES = "restaurant.php";
+    public static String url_all_get = "http://10.0.2.2:8080/intern_app/get/";
+    public static String url_all_post = "http://10.0.2.2:8080/intern_app/post/";
+    public static String url_all_image = "http://10.0.2.2:8080/intern_app/images/";
+    public static String url_User = "user.php";
+    public static String url_post = "post.php";
+    public static String url_comment = "comment.php";
+    public static String url_comment_res = "comment_res.php";
+    public static String url_dishes = "dishes.php";
+    public static String url_like = "like.php";
+    public static String url_order = "order.php";
+    public static String url_payment = "payment.php";
+    public static String url_user_login_status = "user_login_status.php";
 
     TextView textView;
 
@@ -36,7 +36,7 @@ public class SetUp extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SetUp.this,MainActivity.class));
+                startActivity(new Intent(SetUp.this, MainActivity.class));
             }
         });
 
