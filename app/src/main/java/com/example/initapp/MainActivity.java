@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity {          //sign page
         boolean chk = false;
         for (int i = 0 ;i < users.size(); i++) {
             if (username.getText().toString().trim().equals(users.get(i).getUserName())||useremail.getText().toString().trim().equals(users.get(i).getUserEmail())||useraccount.getText().toString().trim().equals(users.get(i).getUserAccount())){
+                st_str_account = users.get(i).getUserAccount();
+                st_str_accountID = users.get(i).getUserID();
                 chk=true;
             }
         }
