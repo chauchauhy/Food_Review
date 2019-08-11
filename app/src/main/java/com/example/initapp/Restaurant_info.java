@@ -1,16 +1,15 @@
 package com.example.initapp;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -18,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.initapp.model.Restaurant;
-import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,46 +28,57 @@ import static android.util.Log.i;
 import static com.example.initapp.SetUp.url_RES;
 import static com.example.initapp.SetUp.url_all_get;
 
-public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    private DrawerLayout mDrawerlayout;
-    private ActionBarDrawerToggle mToggle;
-    private NavigationView navigationView;
+public class Restaurant_info extends AppCompatActivity {
+    ImageView star1,star2,star3,star4,star5,orderImage,Res_ImageView;
+    TextView Res_des,Res_Con,Res_Name,Res_info,Res_comment;
+    ImageButton Image_Like;
     RecyclerView recyclerView;
-    public Context context;
-    public RequestQueue requestQueue;
-    public StringRequest stringRequest;
+    private StringRequest stringRequest;
+    private Context context;
+    private RequestQueue requestQueue;
     ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        mDrawerlayout = findViewById(R.id.drawer);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerlayout,R.string.open,R.string.close);
-        navigationView = findViewById(R.id.Nav_home);
-        mDrawerlayout.addDrawerListener(mToggle);
-        recyclerView = findViewById(R.id.recyclerView);
-        navigationView.setNavigationItemSelectedListener(this);
+        setContentView(R.layout.activity_restaurant_info);
+        initui();
         read();
 
-        mToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
+    private void initui(){
+        star1 = findViewById(R.id.imageView7);
+        star2 = findViewById(R.id.imageView9);
+        star3 = findViewById(R.id.imageView10);
+        star4 = findViewById(R.id.imageView11);
+        star5 = findViewById(R.id.imageView6);
+
+        orderImage = findViewById(R.id.imageView4);
+        Res_ImageView = findViewById(R.id.imageView3);
+
+        Res_des = findViewById(R.id.textView5);
+        Res_Name = findViewById(R.id.textView7);
+        Res_Con = findViewById(R.id.textView6);
+        Res_info = findViewById(R.id.textView8);
+        Res_comment = findViewById(R.id.textView9);
+
+        Image_Like = findViewById(R.id.imageButton14);
+        recyclerView = findViewById(R.id.Res_info_recy);
+
+    }
+
     private void read(){
-        String ur  = url_all_get+url_RES;
-        g get = new g();
-        get.execute(ur);
+        get get1 = new get();
+        get1.execute(url_all_get+url_RES);
     }
-    private class g extends AsyncTask<String, Void, String> {
 
+    private class get extends AsyncTask<String, Void, String>{
         @Override
         protected String doInBackground(String... strings) {
             volley_get(strings[0]);
             return strings[0];
         }
-
     }
 
     public void volley_get(String urlll){
@@ -117,47 +126,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.signup:
-                startActivity(new Intent(Home.this, MainActivity.class));
-                break;
-
-        }
-
-        return true;
     }
 
 }
