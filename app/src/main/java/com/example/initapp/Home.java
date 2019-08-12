@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -35,7 +36,7 @@ import static android.util.Log.i;
 import static com.example.initapp.SetUp.url_RES;
 import static com.example.initapp.SetUp.url_all_get;
 
-public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Cus_Home_Res_List.OnItemClickListener {
     private DrawerLayout mDrawerlayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView navigationView;
@@ -43,6 +44,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public Context context;
     public RequestQueue requestQueue;
     public StringRequest stringRequest;
+    static String resID = "RESID";
     private Cus_Home_Res_List cus_home_res_list;
     public ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
     public ArrayList<Restaurant> clone_res = new ArrayList<Restaurant>();
@@ -59,11 +61,19 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     }
 
-
     private void read() {
         String ur = url_all_get + url_RES;
         g get = new g();
         get.execute(ur);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent i = new Intent(Home.this, Restaurant_info.class);
+        Log.i("sssssss",String.valueOf(restaurants.size()));
+        Log.i("sssssss",String.valueOf(clone_res.size()));
+        i.putExtra(resID,clone_res.get(position).getResID());
+        startActivity(i);
     }
 
     private class g extends AsyncTask<String, Void, String> {
@@ -122,6 +132,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             recyclerView = findViewById(R.id.recyclerView);
             recyclerView.setAdapter(cus_home_res_list);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            cus_home_res_list.setOnItemClickListener(Home.this);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -136,6 +147,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         navigationView.setNavigationItemSelectedListener(this);
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
 
 //        cus_home_res_list = new Cus_Home_Res_List(Home.this,restaurants);
