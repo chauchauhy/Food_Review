@@ -78,7 +78,7 @@ public class AddRestaurant extends AppCompatActivity {
                     String name = ed_name.getText().toString().trim();
                     String parmase = "Res_Name=" + name + "&" + "Res_Detail=" + detail + "&" + "Res_Type=" +"";
                     ///////////////////////
-                    //////finish\\\/////
+                    //////finish\////////
                     ///////////////////////
 
                 } else {
