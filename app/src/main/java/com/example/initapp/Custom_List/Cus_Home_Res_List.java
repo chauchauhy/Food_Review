@@ -56,12 +56,6 @@ public class Cus_Home_Res_List extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         return holder;
     }
-//    private void putdata(String id){
-//        Intent i = new Intent(context, login.class);
-//        i.putExtra("restaurantID",id);
-//        context.startActivity(i);
-//
-//    }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {

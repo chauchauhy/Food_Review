@@ -23,7 +23,14 @@ public class SetUp extends AppCompatActivity {
     public static String url_like = "like.php";
     public static String url_order = "order.php";
     public static String url_payment = "payment.php";
+    public static String url_res_info = "res_info.php";
     public static String url_user_login_status = "user_login_status.php";
+    public static String url_like_post = "like_post.php";
+    public static String chk= "XXXXXXXX";
+    public static String st_str_account = "";
+    public static String st_str_accountID = "";
+    public static String st_str_level= "";
+
 
     TextView textView;
 

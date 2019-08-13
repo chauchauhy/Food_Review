@@ -55,14 +55,14 @@ import java.util.TimerTask;
 import static com.example.initapp.SetUp.url_User;
 import static com.example.initapp.SetUp.url_all_get;
 import static com.example.initapp.SetUp.url_all_post;
+import static com.example.initapp.SetUp.st_str_account;
+import static com.example.initapp.SetUp.st_str_accountID;
 
 public class MainActivity extends AppCompatActivity {          //sign page
     EditText username, useraccount, userpassword, useremail;
     TextView war_name, war_ac, war_pw, war_email;
     Button send;
     LinearLayout linearLayout;
-    static String st_str_account;
-    static String st_str_accountID;
     static String st_str_1;
     public Context context;
     public StringRequest stringRequest;
@@ -83,9 +83,10 @@ public class MainActivity extends AppCompatActivity {          //sign page
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (chknull()&&(!chkexist())) {
+                if (chknull() && (!chkexist())) {
                     post();
-                    startActivity(new Intent(MainActivity.this, ShowRes.class));
+                    st_str_account = username.getText().toString().intern();
+                    startActivity(new Intent(MainActivity.this, Home.class));
                 }
 
 
@@ -94,21 +95,27 @@ public class MainActivity extends AppCompatActivity {          //sign page
         send.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                startActivity(new Intent(MainActivity.this, ShowRes.class));
+                startActivity(new Intent(MainActivity.this, Home.class));
                 return true;
             }
         });
     }
 
+
     private Boolean chkexist() {
         boolean chk = false;
-        for (int i = 0 ;i < users.size(); i++) {
-            if (username.getText().toString().trim().equals(users.get(i).getUserName())||useremail.getText().toString().trim().equals(users.get(i).getUserEmail())||useraccount.getText().toString().trim().equals(users.get(i).getUserAccount())){
-                st_str_account = users.get(i).getUserAccount();
-                st_str_accountID = users.get(i).getUserID();
-                chk=true;
+        context = this;
+        for (int i = 0; i < users.size(); i++) {
+            if (username.getText().toString().trim().equals(users.get(i).getUserName()) || useremail.getText().toString().trim().equals(users.get(i).getUserEmail()) || useraccount.getText().toString().trim().equals(users.get(i).getUserAccount())) {
+//                st_str_account = users.get(i).getUserAccount();
+//                st_str_accountID = users.get(i).getUserID();
+                chk = true;
             }
         }
+        if (chk == true) {
+            Snackbar.make(linearLayout, "the account or email is existed", Snackbar.LENGTH_SHORT).show();
+        }
+        Log.i("ccccccc", String.valueOf(chk));
         return chk;
     }
 

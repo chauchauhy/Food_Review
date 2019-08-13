@@ -9,8 +9,17 @@ public class Order_List {
     private String paymentID;
     private String finish;
     private String order_time;
+    private String Quanity;
 
-    public Order_List(String orderId, String order_content, String price, String order_res_id, String order_res_name, String paymentID, String finish, String order_time) {
+    public String getQuanity() {
+        return Quanity;
+    }
+
+    public void setQuanity(String quanity) {
+        Quanity = quanity;
+    }
+
+    public Order_List(String orderId, String order_content, String price, String order_res_id, String order_res_name, String paymentID, String finish, String order_time, String Quanity) {
         this.orderId = orderId;
         this.order_content = order_content;
         this.price = price;
@@ -19,6 +28,7 @@ public class Order_List {
         this.paymentID = paymentID;
         this.finish = finish;
         this.order_time = order_time;
+        this.Quanity = Quanity;
     }
 
     public Order_List() {
