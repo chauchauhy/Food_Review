@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import static android.util.Log.i;
 import static com.example.initapp.SetUp.url_RES;
 import static com.example.initapp.SetUp.url_all_get;
+import static com.example.initapp.SetUp.url_all_post;
 
 public class AddRestaurant extends AppCompatActivity {
     EditText ed_phone, ed_address, ed_time, ed_price, ed_otherinfo, ed_name;
@@ -52,6 +54,8 @@ public class AddRestaurant extends AppCompatActivity {
     public StringRequest stringRequest;
     public RequestQueue requestQueue;
     public ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+    String type;
+    final  static String[] type1 = {"Thai", "TW", "Other"};
 
 
     @Override
@@ -69,25 +73,36 @@ public class AddRestaurant extends AppCompatActivity {
             public void onClick(View view) {
                 if (chkexist()) {
                     Snackbar.make(add_layout, "the resaurant is existed", Snackbar.LENGTH_SHORT).show();
-                } else if (chk() == false && chkexist() == false) {
+//                } else if (chk() == false && chkexist() == false) {
+                } else if (chkexist() == false) {
+
                     phone = ed_phone.getText().toString().trim();
                     address = ed_address.getText().toString().trim();
                     time = ed_time.getText().toString().trim();
                     price = ed_price.getText().toString().trim();
                     String detail = ed_otherinfo.getText().toString().trim();
                     String name = ed_name.getText().toString().trim();
-                    String parmase = "Res_Name=" + name + "&" + "Res_Detail=" + detail + "&" + "Res_Type=" +"";
-                    ///////////////////////
-                    //////finish\////////
-                    ///////////////////////
+                    if(type.length()<1){
+                        type = type1[0];
+                        String parmase = "Res_Name=" + name + "&" + "Res_Detail=" + detail + "&" + "Res_Type=" +type;
+                        Log.i("qqq",parmase);
+                        post_res(parmase);
+                        read();
+                        eqid(name);
+                        String parmase2 = "";
 
+                    }else {
+                        String parmase = "Res_Name=" + name + "&" + "Res_Detail=" + detail + "&" + "Res_Type=" +type;
+                        Log.i("qqq",parmase);
+                        post_res(parmase);
+                    }
                 } else {
                     Snackbar.make(add_layout, "please fill the form", Snackbar.LENGTH_SHORT).show();
-
                 }
             }
         });
     }
+
 
     private void initui() {
         ed_address = findViewById(R.id.editText14);
@@ -101,11 +116,37 @@ public class AddRestaurant extends AppCompatActivity {
         ed_name = findViewById(R.id.name_res);
         spinner = findViewById(R.id.type);
 
-        final String[] type = {"Thai", "TW", "Other"};
-        ArrayAdapter<String> typelist = new ArrayAdapter<>(AddRestaurant.this,R.layout.support_simple_spinner_dropdown_item,type);
+        spinner.setPrompt("Type");
+        spinner.setSelection(0,true);
+        spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                type = type1[i];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                type = type1[0];
+            }
+        });
+
+
+        ArrayAdapter<String> typelist = new ArrayAdapter<>(AddRestaurant.this,R.layout.support_simple_spinner_dropdown_item,type1);
         spinner.setAdapter(typelist);
 
 
+    }
+    private void post_res(String par){
+        post po = new post();
+        po.execute(url_all_post + url_RES,par);
+    }
+    private class post extends AsyncTask<String , Void , String >{
+        @Override
+        protected String doInBackground(String... strings) {
+            String rep = postHttpURLConnection(strings[0],strings[1]);
+            Log.i("wwwwwww",rep);
+            return rep;
+        }
     }
 
     private Boolean chk() {
@@ -115,6 +156,16 @@ public class AddRestaurant extends AppCompatActivity {
         } else {
             return true;
         }
+    }
+    private void eqid(String name){
+        for(int i =0;i<restaurants.size(); i++){
+            if(name.equals(restaurants.get(i).getResName())){
+                resid = restaurants.get(i).getResID();
+                Log.i("resid",resid);
+                break;
+            }
+        }
+
     }
 
     private Boolean chkexist() {
@@ -135,7 +186,6 @@ public class AddRestaurant extends AppCompatActivity {
     private void read() {
         get gett = new get();
         gett.execute(url_all_get + url_RES);
-
     }
 
     private class get extends AsyncTask<String, Void, String> {
@@ -230,6 +280,7 @@ public class AddRestaurant extends AppCompatActivity {
 
 
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
