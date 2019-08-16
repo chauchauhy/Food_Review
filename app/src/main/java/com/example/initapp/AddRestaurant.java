@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -54,8 +55,9 @@ public class AddRestaurant extends AppCompatActivity {
     public StringRequest stringRequest;
     public RequestQueue requestQueue;
     public ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+    static String response1;
     String type;
-    final  static String[] type1 = {"Thai", "TW", "Other"};
+    final static String[] type1 = {"Thai", "TW", "Other"};
 
 
     @Override
@@ -71,10 +73,11 @@ public class AddRestaurant extends AppCompatActivity {
         post.setOnClickListener(new ImageButton.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(AddRestaurant.this,Home.class);
                 if (chkexist()) {
                     Snackbar.make(add_layout, "the resaurant is existed", Snackbar.LENGTH_SHORT).show();
-//                } else if (chk() == false && chkexist() == false) {
-                } else if (chkexist() == false) {
+                } else if (chk() == true && chkexist() == false) {
+//                } else if (chkexist() == false) {
 
                     phone = ed_phone.getText().toString().trim();
                     address = ed_address.getText().toString().trim();
@@ -82,19 +85,18 @@ public class AddRestaurant extends AppCompatActivity {
                     price = ed_price.getText().toString().trim();
                     String detail = ed_otherinfo.getText().toString().trim();
                     String name = ed_name.getText().toString().trim();
-                    if(type.length()<1){
+                    if (type.length() < 1) {
                         type = type1[0];
-                        String parmase = "Res_Name=" + name + "&" + "Res_Detail=" + detail + "&" + "Res_Type=" +type;
-                        Log.i("qqq",parmase);
+                        String parmase = "Res_Name=" + name + "&" + "Res_Detail=" + detail + "&" + "Res_Type=" + type+ "&" +"phone=" + phone + "&" +
+                                "Address=" + address + "&" + "Time=" + time + "&" + "Price=" + price;
                         post_res(parmase);
-                        read();
-                        eqid(name);
-                        String parmase2 = "";
+                        startActivity(intent);
 
-                    }else {
-                        String parmase = "Res_Name=" + name + "&" + "Res_Detail=" + detail + "&" + "Res_Type=" +type;
-                        Log.i("qqq",parmase);
+                    } else {
+                        String parmase = "Res_Name=" + name + "&" + "Res_Detail=" + detail + "&" + "Res_Type=" + type+ "&" +"phone=" + phone + "&" +
+                                "Address=" + address + "&" + "Time=" + time + "&" + "Price=" + price;
                         post_res(parmase);
+                        startActivity(intent);
                     }
                 } else {
                     Snackbar.make(add_layout, "please fill the form", Snackbar.LENGTH_SHORT).show();
@@ -117,7 +119,7 @@ public class AddRestaurant extends AppCompatActivity {
         spinner = findViewById(R.id.type);
 
         spinner.setPrompt("Type");
-        spinner.setSelection(0,true);
+        spinner.setSelection(0, true);
         spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -131,20 +133,23 @@ public class AddRestaurant extends AppCompatActivity {
         });
 
 
-        ArrayAdapter<String> typelist = new ArrayAdapter<>(AddRestaurant.this,R.layout.support_simple_spinner_dropdown_item,type1);
+        ArrayAdapter<String> typelist = new ArrayAdapter<>(AddRestaurant.this, R.layout.support_simple_spinner_dropdown_item, type1);
         spinner.setAdapter(typelist);
 
 
     }
-    private void post_res(String par){
+
+    private void post_res(String par) {
         post po = new post();
-        po.execute(url_all_post + url_RES,par);
+        po.execute(url_all_post + url_RES, par);
     }
-    private class post extends AsyncTask<String , Void , String >{
+
+    private class post extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {
-            String rep = postHttpURLConnection(strings[0],strings[1]);
-            Log.i("wwwwwww",rep);
+            String rep = postHttpURLConnection(strings[0], strings[1]);
+            Log.i("wwwwwww", rep);
+            response1 = rep;
             return rep;
         }
     }
@@ -157,11 +162,12 @@ public class AddRestaurant extends AppCompatActivity {
             return true;
         }
     }
-    private void eqid(String name){
-        for(int i =0;i<restaurants.size(); i++){
-            if(name.equals(restaurants.get(i).getResName())){
+
+    private void eqid(String name) {
+        for (int i = 0; i < restaurants.size(); i++) {
+            if (name.equals(restaurants.get(i).getResName())) {
                 resid = restaurants.get(i).getResID();
-                Log.i("resid",resid);
+                Log.i("resid", resid);
                 break;
             }
         }
@@ -194,6 +200,7 @@ public class AddRestaurant extends AppCompatActivity {
             volley_get(strings[0]);
             return strings[0];
         }
+
     }
 
     public void volley_get(String urlll) {

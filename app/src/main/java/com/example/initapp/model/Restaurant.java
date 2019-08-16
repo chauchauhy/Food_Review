@@ -10,6 +10,58 @@ public class Restaurant {
     private String resLike;
     private String resMark;
     private String resType;
+    private String phone;
+    private String address;
+    private String price;
+    private String time;
+
+    public Restaurant(String resID, String resName, String resDetail, String resImage, String resImage2, String resImage3, String resLike, String resMark, String resType, String phone, String address, String price, String time) {
+        this.resID = resID;
+        this.resName = resName;
+        this.resDetail = resDetail;
+        this.resImage = resImage;
+        this.resImage2 = resImage2;
+        this.resImage3 = resImage3;
+        this.resLike = resLike;
+        this.resMark = resMark;
+        this.resType = resType;
+        this.phone = phone;
+        this.address = address;
+        this.price = price;
+        this.time = time;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public Restaurant(String resID, String resName, String resDetail, String resImage, String resImage2, String resImage3, String resLike, String resMark, String resType) {
         this.resID = resID;

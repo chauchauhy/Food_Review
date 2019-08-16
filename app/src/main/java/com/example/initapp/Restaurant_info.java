@@ -1,5 +1,6 @@
 package com.example.initapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,6 +28,7 @@ import com.example.initapp.model.Like;
 import com.example.initapp.model.Res_Info;
 import com.example.initapp.model.Restaurant;
 import com.example.initapp.model.User;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -44,8 +47,8 @@ import static com.example.initapp.SetUp.url_like;
 import static com.example.initapp.SetUp.url_res_info;
 
 public class Restaurant_info extends AppCompatActivity implements Cus_Res_comment_list.OnItemClickListener {
-    ImageView star1, star2, star3, star4, star5, Res_ImageView,like_image;
-    TextView Res_des, Res_Con, Res_Name, Res_info, Res_comment,Res_deatil,Dishes;
+    ImageView star1, star2, star3, star4, star5, Res_ImageView, like_image;
+    TextView Res_des, Res_Con, Res_Name, Res_info, Res_comment, Res_deatil, Dishes;
     ImageButton Image_Like;
     RecyclerView recyclerView;
     private StringRequest stringRequest;
@@ -53,9 +56,12 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
     private RequestQueue requestQueue;
     ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
     String RES_ID;
-    private ArrayList<Res_Info>res_infos = new ArrayList<Res_Info>();
+    private ArrayList<Res_Info> res_infos = new ArrayList<Res_Info>();
     private ArrayList<Comment_Restaurant> comment_restaurants = new ArrayList<Comment_Restaurant>();
     private Cus_Res_comment_list cus_res_comment_list;
+    View subview;
+    BottomNavigationView bottomNavigationView;
+    String name, rate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +77,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         Dishes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Restaurant_info.this,Order.class).putExtra(resID,RES_ID));
+                startActivity(new Intent(Restaurant_info.this, Order.class).putExtra(resID, RES_ID));
             }
         });
         Res_info.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +99,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
 
     private void read() {
         get get1 = new get();
-        get1.execute(url_all_get + url_RES,url_all_get+url_res_info,url_all_get+url_like,url_all_get+url_comment_res);
+        get1.execute(url_all_get + url_RES, url_all_get + url_res_info, url_all_get + url_like, url_all_get + url_comment_res);
     }
 
     @Override
@@ -104,7 +110,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         @Override
         protected String doInBackground(String... strings) {
             volley_get(strings[0]);
-            volley_get_detail(strings[1]);
+//            volley_get_detail(strings[1]);
             volley_get_like(strings[2]);
             volley_get_comment(strings[3]);
             return strings[0];
@@ -129,7 +135,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         requestQueue.add(stringRequest);
     }
 
-    public void volley_get_comment(String urll){
+    public void volley_get_comment(String urll) {
         context = this;
         requestQueue = Volley.newRequestQueue(context);
         stringRequest = new StringRequest(urll, new Response.Listener<String>() {
@@ -147,26 +153,26 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         requestQueue.add(stringRequest);
     }
 
-    private void volley_get_detail(String urll){
-        context = this;
-        requestQueue = Volley.newRequestQueue(context);
-        stringRequest = new StringRequest(urll, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                jsontoarrde(response);
-                Log.i("responessa", response);
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                String err = error.toString();
-                Log.i("responessa", err);
-            }
-        });
-        requestQueue.add(stringRequest);
-    }
-    private void volley_get_like(String urll){
+    //    private void volley_get_detail(String urll){
+//        context = this;
+//        requestQueue = Volley.newRequestQueue(context);
+//        stringRequest = new StringRequest(urll, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                jsontoarrde(response);
+//                Log.i("responessa", response);
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                String err = error.toString();
+//                Log.i("responessa", err);
+//            }
+//        });
+//        requestQueue.add(stringRequest);
+//    }
+    private void volley_get_like(String urll) {
         context = this;
         requestQueue = Volley.newRequestQueue(context);
         stringRequest = new StringRequest(urll, new Response.Listener<String>() {
@@ -203,12 +209,12 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
                 String User_Name = j.getString("User_Name");
                 String CM_RES_IMAGE = j.getString("CM_RES_IMAGE");
 
-                if(CM_RES_ID.equals(RES_ID)){
-                    Comment_Restaurant comment_restaurant = new Comment_Restaurant(id,CM_RES_ID,CM_USER_ID, User_Name,CM_TITLE,CM_CONTENT,CM_TIME,CM_RES_IMAGE);
+                if (CM_RES_ID.equals(RES_ID)) {
+                    Comment_Restaurant comment_restaurant = new Comment_Restaurant(id, CM_RES_ID, CM_USER_ID, User_Name, CM_TITLE, CM_CONTENT, CM_TIME, CM_RES_IMAGE);
                     comment_restaurants.add(comment_restaurant);
                 }
             }
-            cus_res_comment_list = new Cus_Res_comment_list(Restaurant_info.this,comment_restaurants);
+            cus_res_comment_list = new Cus_Res_comment_list(Restaurant_info.this, comment_restaurants);
             recyclerView.setAdapter(cus_res_comment_list);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             cus_res_comment_list.setOnItemClickListener(Restaurant_info.this);
@@ -217,8 +223,6 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
             e.printStackTrace();
         }
     }
-
-
 
 
     private void jsonlike(String json) {
@@ -233,10 +237,10 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
                 String userid = j.getString("UserID");
                 String resid = j.getString("Res_ID");
 
-                if(resid.equals(RES_ID) && userid.equals("1")){                  //change userid.eq
-                    Like like = new Like(id,resid,userid);
-                    Log.i("saaaaaaaaa", like.getRes_ID()+ "xxxxxxxxxxxxx" +like.getUserId());
-                    setlike(like.getRes_ID(),like.getUserId());
+                if (resid.equals(RES_ID) && userid.equals("1")) {                  //change userid.eq
+                    Like like = new Like(id, resid, userid);
+                    Log.i("saaaaaaaaa", like.getRes_ID() + "xxxxxxxxxxxxx" + like.getUserId());
+                    setlike(like.getRes_ID(), like.getUserId());
                 }
             }
         } catch (JSONException e) {
@@ -244,53 +248,53 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         }
     }
 
-    private void setlike(String resID,String userid){
-        if(resID.equals(RES_ID)&& userid.equals("1")){
+    private void setlike(String resID, String userid) {
+        if (resID.equals(RES_ID) && userid.equals("1")) {
             Image_Like.setVisibility(View.GONE);
             like_image.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             like_image.setVisibility(View.GONE);
             Image_Like.setVisibility(View.VISIBLE);
         }
     }
 
 
-    private void jsontoarrde(String json){
-        i("jsona", json);
-        try {
-            JSONObject root = new JSONObject(json);
-            JSONArray jsonArray = root.getJSONArray("res_info");
+//    private void jsontoarrde(String json){
+//        i("jsona", json);
+//        try {
+//            JSONObject root = new JSONObject(json);
+//            JSONArray jsonArray = root.getJSONArray("res_info");
+//
+//            for (int i = 0; i < jsonArray.length(); i++) {
+//                JSONObject j = jsonArray.getJSONObject(i);
+//
+//                String id = j.getString("Res_info_id");
+//                String Res_info_phone = j.getString("Res_info_phone");
+//                String Res_Address = j.getString("Res_Address");
+//                String Res_Time = j.getString("Res_Time");
+//                String Res_Price = j.getString("Res_Price");
+//                String Res_ID = j.getString("Res_ID");
+//
+//                if (Res_ID.equals(RES_ID)) {
+//
+//                    Res_Info res_info = new Res_Info(id,Res_info_phone,Res_Address,Res_Time,Res_Price,Res_ID);
+//                    Log.i("restauaaa", res_info.toString());
+//
+//
+//                }
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject j = jsonArray.getJSONObject(i);
-
-                String id = j.getString("Res_info_id");
-                String Res_info_phone = j.getString("Res_info_phone");
-                String Res_Address = j.getString("Res_Address");
-                String Res_Time = j.getString("Res_Time");
-                String Res_Price = j.getString("Res_Price");
-                String Res_ID = j.getString("Res_ID");
-
-                if (Res_ID.equals(RES_ID)) {
-
-                    Res_Info res_info = new Res_Info(id,Res_info_phone,Res_Address,Res_Time,Res_Price,Res_ID);
-                    Log.i("restauaaa", res_info.toString());
-                    setuidetail(Res_info_phone ,Res_Address, Res_Time, Res_Price);
-
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void setuidetail(String phone,String address, String time, String price){
+    private void setuidetail(String phone, String address, String time, String price) {
         String n1 = "PHONE : ";
         String n2 = "Address : ";
-        String n3 = "Price : " ;
+        String n3 = "Price : ";
         String n4 = "Time : ";
 
-        Res_deatil.setText(n1 + phone + "\n" + "\n" + n2 + address  + "\n" + "\n" + n3 + price  + "\n" + "\n" + n4 + time);
+        Res_deatil.setText(n1 + phone + "\n" + "\n" + n2 + address + "\n" + "\n" + n3 + price + "\n" + "\n" + n4 + time);
         Res_deatil.setVisibility(View.VISIBLE);
     }
 
@@ -312,14 +316,23 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
                 String Res_Like = j.getString("Res_Like");
                 String Res_Mark = j.getString("Res_Mark");
                 String Res_Type = j.getString("Res_Type");
+                String phone = j.getString("phone");
+                String Address = j.getString("Address");
+                String Time = j.getString("Time");
+                String Price = j.getString("Price");
 
                 if (id.equals(RES_ID)) {
 
-                    Restaurant restaurant = new Restaurant(id, Res_Name, Res_Detail, Res_Image, Res_Image2, Res_Image3, Res_Like, Res_Mark, Res_Type);
+                    Restaurant restaurant = new Restaurant(id, Res_Name, Res_Detail, Res_Image, Res_Image2, Res_Image3, Res_Like, Res_Mark, Res_Type, phone, Address, Time, Price);
                     Log.i("restauaaa", restaurant.toString());
                     restaurants.add(restaurant);
-                    setui(Res_Mark ,Res_Image, Res_Image2, Res_Image3,Res_Name, Res_Detail);
+                    setui(Res_Mark, Res_Image, Res_Image2, Res_Image3, Res_Name, Res_Detail);
+                    this.name = Res_Name;
+                    this.rate = Res_Mark;
 
+                    setuidetail(restaurant.getPhone(), restaurant.getAddress(), restaurant.getTime(), restaurant.getPrice());
+
+                    break;
                 }
             }
         } catch (JSONException e) {
@@ -334,6 +347,23 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         star3 = findViewById(R.id.imageView10);
         star4 = findViewById(R.id.imageView11);
         star5 = findViewById(R.id.imageView6);
+        bottomNavigationView = findViewById(R.id.nav_bar_resinfo);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.nav_home:
+                        startActivity(new Intent(Restaurant_info.this, Home.class));
+                        break;
+
+                    case R.id.nav_add:
+                        startActivity(new Intent(Restaurant_info.this, AddReview.class).putExtra(resID, RES_ID).putExtra("NAME", name).putExtra("RATE", rate));
+                        break;
+                }
+                return true;
+            }
+        });
+
 
         Dishes = findViewById(R.id.imageView4);
         Res_ImageView = findViewById(R.id.imageView3);
@@ -353,7 +383,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         like_image = findViewById(R.id.imageButton15);
     }
 
-    private void setui(String mark_st,String imagepath1 , String imagepath2,String imagepath3,String Res_Name,String Res_Detail) {
+    private void setui(String mark_st, String imagepath1, String imagepath2, String imagepath3, String Res_Name, String Res_Detail) {
         if (mark_st != null) {
             int mark = Integer.valueOf(mark_st);
             if (mark >= 5) {
@@ -400,10 +430,10 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
                 star5.setVisibility(View.INVISIBLE);
             }
         }
-        if(imagepath1 != null){
-            Picasso.with(Restaurant_info.this).load(url_all_image+imagepath1).fit().placeholder(R.drawable.btn_back).into(Res_ImageView);
+        if (imagepath1 != null) {
+            Picasso.with(Restaurant_info.this).load(url_all_image + imagepath1).fit().placeholder(R.drawable.btn_back).into(Res_ImageView);
         }
-        if(Res_Name != null && Res_Detail !=null){
+        if (Res_Name != null && Res_Detail != null) {
             Res_des.setText(Res_Detail);
             this.Res_Name.setText(Res_Name);
         }
