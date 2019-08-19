@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -39,6 +40,8 @@ import java.util.ArrayList;
 
 import static android.util.Log.i;
 import static com.example.initapp.Home.resID;
+import static com.example.initapp.SetUp.st_str_account;
+import static com.example.initapp.SetUp.st_str_accountID;
 import static com.example.initapp.SetUp.url_RES;
 import static com.example.initapp.SetUp.url_all_get;
 import static com.example.initapp.SetUp.url_all_image;
@@ -70,6 +73,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         initui();
         read();
 
+
         Intent i = getIntent();
         RES_ID = i.getStringExtra(resID);
 
@@ -100,6 +104,8 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
     private void read() {
         get get1 = new get();
         get1.execute(url_all_get + url_RES, url_all_get + url_res_info, url_all_get + url_like, url_all_get + url_comment_res);
+        Log.i("Loing",  comment_restaurants.size()+ RES_ID);
+
     }
 
     @Override
@@ -110,9 +116,9 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         @Override
         protected String doInBackground(String... strings) {
             volley_get(strings[0]);
-//            volley_get_detail(strings[1]);
             volley_get_like(strings[2]);
             volley_get_comment(strings[3]);
+            Log.i("Loing",  comment_restaurants.size()+ RES_ID);
             return strings[0];
         }
     }
@@ -153,25 +159,6 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         requestQueue.add(stringRequest);
     }
 
-    //    private void volley_get_detail(String urll){
-//        context = this;
-//        requestQueue = Volley.newRequestQueue(context);
-//        stringRequest = new StringRequest(urll, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                jsontoarrde(response);
-//                Log.i("responessa", response);
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                String err = error.toString();
-//                Log.i("responessa", err);
-//            }
-//        });
-//        requestQueue.add(stringRequest);
-//    }
     private void volley_get_like(String urll) {
         context = this;
         requestQueue = Volley.newRequestQueue(context);
@@ -179,21 +166,19 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
             @Override
             public void onResponse(String response) {
                 jsonlike(response);
-                Log.i("responessa", response);
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 String err = error.toString();
-                Log.i("responessa", err);
             }
         });
         requestQueue.add(stringRequest);
     }
 
     private void jsoncomment(String json) {
-        i("jsonaaas", json);
+        i("jsonaaaasdfs", json);
         try {
             JSONObject root = new JSONObject(json);
             JSONArray jsonArray = root.getJSONArray("comment_restaurant");
@@ -206,18 +191,21 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
                 String CM_TITLE = j.getString("CM_TITLE");
                 String CM_CONTENT = j.getString("CM_CONTENT");
                 String CM_TIME = j.getString("CM_TIME");
-                String User_Name = j.getString("User_Name");
+                String CM_USER_NAME = j.getString("CM_USER_NAME");
                 String CM_RES_IMAGE = j.getString("CM_RES_IMAGE");
 
                 if (CM_RES_ID.equals(RES_ID)) {
-                    Comment_Restaurant comment_restaurant = new Comment_Restaurant(id, CM_RES_ID, CM_USER_ID, User_Name, CM_TITLE, CM_CONTENT, CM_TIME, CM_RES_IMAGE);
+                    Comment_Restaurant comment_restaurant = new Comment_Restaurant(id,CM_RES_ID,CM_USER_ID,CM_USER_NAME,CM_TITLE,CM_CONTENT,CM_TIME,CM_RES_IMAGE);
                     comment_restaurants.add(comment_restaurant);
+                    Log.i("debuging",comment_restaurant.toString());
                 }
+
             }
             cus_res_comment_list = new Cus_Res_comment_list(Restaurant_info.this, comment_restaurants);
             recyclerView.setAdapter(cus_res_comment_list);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             cus_res_comment_list.setOnItemClickListener(Restaurant_info.this);
+            Log.i("Loing",  comment_restaurants.size()+ RES_ID);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -226,7 +214,6 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
 
 
     private void jsonlike(String json) {
-        i("jsonaaas", json);
         try {
             JSONObject root = new JSONObject(json);
             JSONArray jsonArray = root.getJSONArray("liked");
@@ -237,7 +224,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
                 String userid = j.getString("UserID");
                 String resid = j.getString("Res_ID");
 
-                if (resid.equals(RES_ID) && userid.equals("1")) {                  //change userid.eq
+                if (resid.equals(RES_ID) && userid.equals(st_str_accountID)) {                  //change userid.eq
                     Like like = new Like(id, resid, userid);
                     Log.i("saaaaaaaaa", like.getRes_ID() + "xxxxxxxxxxxxx" + like.getUserId());
                     setlike(like.getRes_ID(), like.getUserId());
@@ -249,7 +236,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
     }
 
     private void setlike(String resID, String userid) {
-        if (resID.equals(RES_ID) && userid.equals("1")) {
+        if (resID.equals(RES_ID) && userid.equals(st_str_accountID)) {
             Image_Like.setVisibility(View.GONE);
             like_image.setVisibility(View.VISIBLE);
         } else {
@@ -357,8 +344,20 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
                         break;
 
                     case R.id.nav_add:
-                        startActivity(new Intent(Restaurant_info.this, AddReview.class).putExtra(resID, RES_ID).putExtra("NAME", name).putExtra("RATE", rate));
+                        if(st_str_accountID.length()<1){
+                            Toast.makeText(Restaurant_info.this,"You need login to use this function",Toast.LENGTH_SHORT).show();
+                        }else {
+                            startActivity(new Intent(Restaurant_info.this, AddReview.class).putExtra(resID, RES_ID).putExtra("NAME", name).putExtra("RATE", rate));
+                        }
                         break;
+                    case R.id.nav_profile:
+                        if (st_str_account.length() > 4) {
+                            startActivity(new Intent(Restaurant_info.this,Profolio.class));
+                            break;
+                        }else {
+                            Toast.makeText(Restaurant_info.this,"You may be need login",Toast.LENGTH_SHORT).show();
+                        }
+
                 }
                 return true;
             }

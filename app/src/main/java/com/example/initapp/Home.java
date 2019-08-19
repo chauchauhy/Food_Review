@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -58,6 +59,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public ArrayList<Restaurant> clone_res = new ArrayList<Restaurant>();
     public ArrayList<User> users = new ArrayList<User>();
     BottomNavigationView bottomNavigationView;
+    TextView username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +81,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                         break;
                     case R.id.nav_profile:
                         if (st_str_account.length() > 4) {
-
+                            startActivity(new Intent(Home.this, Profolio.class));
+                            break;
+                        } else {
+                            Toast.makeText(Home.this, "You may be need login", Toast.LENGTH_SHORT).show();
                         }
                 }
 
@@ -226,6 +231,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         navigationView = findViewById(R.id.Nav_home);
         mDrawerlayout.addDrawerListener(mToggle);
         navigationView.setNavigationItemSelectedListener(this);
+        username = navigationView.getHeaderView(0).findViewById(R.id.username_nav);
+
+        if (st_str_account.length() > 3) {
+            username.setText(st_str_account);
+        }else{
+            username.setText("GUEST");
+        }
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navigationView.getMenu().findItem(R.id.homepage).setVisible(false);
@@ -273,9 +285,19 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
 
             case R.id.order:
-                startActivity(new Intent(Home.this, Order.class));
+                if(st_str_accountID.length()<1){
+                    Toast.makeText(Home.this,"You need login to use this function",Toast.LENGTH_SHORT).show();
+                }else {
+                    startActivity(new Intent(Home.this, Order.class));
+                }
                 break;
+            case R.id.logout:
+                st_str_account = "";
+                st_str_level = "GUEST";
+                st_str_accountID = "";
+                Toast.makeText(Home.this,"Logout",Toast.LENGTH_SHORT).show();
 
+                break;
 
         }
 

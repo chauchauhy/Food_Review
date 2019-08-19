@@ -73,7 +73,7 @@ public class Order extends AppCompatActivity {
         stringRequest = new StringRequest(urlll, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                i("responseforres", response);
+                i("fororder", response);
                 JsontoArray(response);
             }
         }, new Response.ErrorListener() {
@@ -109,7 +109,7 @@ public class Order extends AppCompatActivity {
                 }
             }
             cus_order_list = new Cus_Order_list(orders,Order.this);
-            Log.i("sadf",String.valueOf(orders.size()));
+
             recyclerView.setAdapter(cus_order_list);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

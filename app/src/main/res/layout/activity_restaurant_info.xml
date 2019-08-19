@@ -152,8 +152,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/Res_info_recy"
-        android:layout_width="400dp"
-        android:layout_height="248dp"
+        android:layout_width="399dp"
+        android:layout_height="156dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -162,7 +162,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        app:layout_constraintVertical_bias="0.201" />
 
 
     <ImageButton
@@ -219,6 +220,8 @@
         app:menu="@menu/nav_item"
         android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

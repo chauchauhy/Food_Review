@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import static com.example.initapp.SetUp.url_all_image;
+import static com.example.initapp.SetUp.url_all_post;
 
 public class Cus_Res_comment_list extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
@@ -53,8 +54,11 @@ public class Cus_Res_comment_list extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Res_CM_VH res_cm_vh = (Res_CM_VH) holder;
         comment_restaurant = comment_restaurants.get(position);
-        String urll = url_all_image + comment_restaurant.getCM_RES_image();
-        if(! (urll.contains("null"))) {
+        String urll = url_all_post + "/upload/" + comment_restaurant.getCM_RES_image();
+        if( (urll.length()< 50)) {
+            res_cm_vh.cus_post_image.setVisibility(View.GONE);
+        }else {
+            res_cm_vh.cus_post_image.setVisibility(View.VISIBLE);
             Picasso.with(layoutInflater.getContext())
                     .load(urll)
                     .placeholder(R.drawable.btn_back)
@@ -62,8 +66,6 @@ public class Cus_Res_comment_list extends RecyclerView.Adapter<RecyclerView.View
                     .error(R.drawable.btn_add)
                     .into(res_cm_vh.cus_post_image);
             Log.i("httpuril", urll);
-        }else {
-            res_cm_vh.cus_post_image.setVisibility(View.GONE);
         }
         res_cm_vh.cus_post_author.setText(comment_restaurant.getCm_user_name());
         res_cm_vh.cus_post_content.setText(comment_restaurant.getCm_content());

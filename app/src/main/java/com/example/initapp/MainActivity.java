@@ -11,11 +11,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -61,8 +63,8 @@ import static com.example.initapp.SetUp.st_str_accountID;
 public class MainActivity extends AppCompatActivity {          //sign page
     EditText username, useraccount, userpassword, useremail;
     TextView war_name, war_ac, war_pw, war_email;
-    Button send;
-    LinearLayout linearLayout;
+    ImageButton send;
+    ConstraintLayout linearLayout;
     static String st_str_1;
     public Context context;
     public StringRequest stringRequest;

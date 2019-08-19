@@ -14,7 +14,8 @@ public class SetUp extends AppCompatActivity {
     public static String url_RES = "restaurant.php";
     public static String url_all_get = "http://10.0.2.2:8080/intern_app/get/";
     public static String url_all_post = "http://10.0.2.2:8080/intern_app/post/";
-    public static String url_all_image = "http://10.0.2.2:8080/intern_app/images/";
+    public static String url_all_image = "http://10.0.2.2:8080/intern_app/post/upload/";
+    public static String url_postimage = "postimage.php";
     public static String url_User = "user.php";
     public static String url_post = "post.php";
     public static String url_comment = "comment.php";

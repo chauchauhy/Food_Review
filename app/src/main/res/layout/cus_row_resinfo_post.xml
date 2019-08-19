@@ -8,16 +8,18 @@
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="36dp" />-->
 
-    <ImageView
-        android:id="@+id/cus_post_image"
-        android:layout_width="362dp"
-        android:layout_height="83dp"
-        android:scaleType="fitXY" />
-
     <TextView
         android:id="@+id/cus_post_author"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/cus_post_image"
+        android:layout_gravity="center"
+
+        android:layout_width="178dp"
+        android:layout_height="83dp"
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/cus_post_Title"

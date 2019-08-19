@@ -23,17 +23,17 @@ public class Comment_Restaurant {
         }
     }
 
-    public Comment_Restaurant(String cm_id, String cm_res_id, String cm_res_name, String cm_user_id, String cm_user_name, String cm_title, String cm_content, String cm_time, String CM_RES_image) {
-        this.cm_id = cm_id;
-        this.cm_res_id = cm_res_id;
-        this.cm_res_name = cm_res_name;
-        this.cm_user_id = cm_user_id;
-        this.cm_user_name = cm_user_name;
-        this.cm_title = cm_title;
-        this.cm_content = cm_content;
-        this.cm_time = cm_time;
-        setCM_RES_image(CM_RES_image);
-    }
+//    public Comment_Restaurant(String cm_id, String cm_res_id, String cm_res_name, String cm_user_id, String cm_user_name, String cm_title, String cm_content, String cm_time, String CM_RES_image) {
+//        this.cm_id = cm_id;
+//        this.cm_res_id = cm_res_id;
+//        this.cm_res_name = cm_res_name;
+//        this.cm_user_id = cm_user_id;
+//        this.cm_user_name = cm_user_name;
+//        this.cm_title = cm_title;
+//        this.cm_content = cm_content;
+//        this.cm_time = cm_time;
+//        setCM_RES_image(CM_RES_image);
+//    }
 
     public Comment_Restaurant(String cm_id, String cm_res_id, String cm_user_id, String cm_user_name, String cm_title, String cm_content, String cm_time) {
         this.cm_id = cm_id;
@@ -48,15 +48,15 @@ public class Comment_Restaurant {
     public Comment_Restaurant() {
     }
 
-    public Comment_Restaurant(String cm_id, String cm_res_id, String cm_res_name, String cm_user_id, String cm_user_name, String cm_title, String cm_content, String cm_time) {
+    public Comment_Restaurant(String cm_id, String cm_res_id, String cm_user_id, String cm_user_name, String cm_title, String cm_content, String cm_time,String CM_RES_image) {
         this.cm_id = cm_id;
         this.cm_res_id = cm_res_id;
-        this.cm_res_name = cm_res_name;
         this.cm_user_id = cm_user_id;
         this.cm_user_name = cm_user_name;
         this.cm_title = cm_title;
         this.cm_content = cm_content;
         this.cm_time = cm_time;
+        setCM_RES_image(CM_RES_image);
     }
 
     public String getCm_id() {
