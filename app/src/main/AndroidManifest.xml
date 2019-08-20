@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".Profolio"></activity>
         <activity android:name=".AddReview" />
         <activity android:name=".AddRestaurant" />
@@ -46,5 +47,6 @@
 
         <activity android:name=".MainActivity" />
     </application>
+
 
 </manifest>

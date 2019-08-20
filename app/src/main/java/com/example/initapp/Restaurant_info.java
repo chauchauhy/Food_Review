@@ -45,6 +45,7 @@ import static com.example.initapp.SetUp.st_str_accountID;
 import static com.example.initapp.SetUp.url_RES;
 import static com.example.initapp.SetUp.url_all_get;
 import static com.example.initapp.SetUp.url_all_image;
+import static com.example.initapp.SetUp.url_all_imageforupload;
 import static com.example.initapp.SetUp.url_comment_res;
 import static com.example.initapp.SetUp.url_like;
 import static com.example.initapp.SetUp.url_res_info;
@@ -81,7 +82,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         Dishes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Restaurant_info.this, Order.class).putExtra(resID, RES_ID));
+                startActivity(new Intent(Restaurant_info.this, Dish.class).putExtra(resID, RES_ID));
             }
         });
         Res_info.setOnClickListener(new View.OnClickListener() {
@@ -430,7 +431,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
             }
         }
         if (imagepath1 != null) {
-            Picasso.with(Restaurant_info.this).load(url_all_image + imagepath1).fit().placeholder(R.drawable.btn_back).into(Res_ImageView);
+            Picasso.with(Restaurant_info.this).load(url_all_imageforupload + imagepath1).placeholder(R.drawable.btn_back).into(Res_ImageView);
         }
         if (Res_Name != null && Res_Detail != null) {
             Res_des.setText(Res_Detail);

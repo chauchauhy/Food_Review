@@ -5,12 +5,15 @@ public class Dishes {
     private String dishes_name;
     private String dishes_Image;
     private String dishes_res_id;
+    private Integer price;
 
-    public Dishes(String dishes_ID, String dishes_name, String dishes_Image, String dishes_res_id) {
+
+    public Dishes(String dishes_ID, String dishes_name, String dishes_Image, String dishes_res_id,String price) {
         this.dishes_ID = dishes_ID;
         this.dishes_name = dishes_name;
         this.dishes_Image = dishes_Image;
         this.dishes_res_id = dishes_res_id;
+        this.price = Integer.valueOf(price);
     }
 
     public Dishes() {

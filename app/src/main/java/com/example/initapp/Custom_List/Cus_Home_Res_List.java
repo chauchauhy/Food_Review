@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 
 import static com.example.initapp.SetUp.url_RES;
 import static com.example.initapp.SetUp.url_all_image;
+import static com.example.initapp.SetUp.url_all_imageforupload;
 
 public class Cus_Home_Res_List extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     LayoutInflater layoutInflater;
@@ -31,13 +33,22 @@ public class Cus_Home_Res_List extends RecyclerView.Adapter<RecyclerView.ViewHol
     Context context;
     Restaurant restaurant;
     private OnItemClickListener listener;
+    private OnItemLongClickListener longClickListener;
 
     public interface OnItemClickListener{
         void onItemClick(int position);
     }
 
+    public interface OnItemLongClickListener{
+        void onItemLongClick(int position);
+    }
+
     public void setOnItemClickListener(OnItemClickListener listener){
         this.listener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener longClickListener){
+        this.longClickListener = longClickListener;
     }
 
     public Cus_Home_Res_List(Context context, ArrayList<Restaurant> restaurants) {
@@ -61,7 +72,7 @@ public class Cus_Home_Res_List extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
         Res_Home_List home_list = (Res_Home_List) holder;
         restaurant = restaurants.get(i);
-        String urll = url_all_image+restaurant.getResImage();
+        String urll = url_all_imageforupload+restaurant.getResImage();
         Picasso.with(layoutInflater.getContext())
                 .load(urll)
                 .placeholder(R.drawable.btn_back)
@@ -107,6 +118,20 @@ public class Cus_Home_Res_List extends RecyclerView.Adapter<RecyclerView.ViewHol
                             listener.onItemClick(position);
                         }
                     }
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if(longClickListener!=null){
+                        int position = getAdapterPosition();
+                        if(position!=RecyclerView.NO_POSITION){
+                            longClickListener.onItemLongClick(position);
+                        }
+                    }
+
+
+                    return true;
                 }
             });
         }

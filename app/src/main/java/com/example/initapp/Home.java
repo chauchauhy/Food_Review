@@ -23,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.example.initapp.Custom_List.Cus_Home_Res_List;
 import com.example.initapp.model.Restaurant;
 import com.example.initapp.model.User;
@@ -60,11 +61,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public ArrayList<User> users = new ArrayList<User>();
     BottomNavigationView bottomNavigationView;
     TextView username;
+    private static final String TAG = "Home";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Crashlytics.log(Log.DEBUG, TAG, "Crash");
         read();
         initui();
         Log.i(chk, st_str_account);
@@ -296,6 +299,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 st_str_level = "GUEST";
                 st_str_accountID = "";
                 Toast.makeText(Home.this,"Logout",Toast.LENGTH_SHORT).show();
+                reload();
 
                 break;
 
@@ -304,5 +308,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         return true;
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+    }
 
+    public void reload() {
+        Intent i = getIntent();
+        finish();
+        startActivity(i);
+    }
 }
