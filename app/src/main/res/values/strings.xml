@@ -5,5 +5,7 @@
     <string name="nav_home">Home</string>
     <string name="nav_add">Add</string>
     <string name="nav_profile">Profile</string>
+    <string name="facebook_app_id">874144292946225</string>
+    <string name="fb_login_protocol_scheme">fb874144292946225</string>
 
 </resources>

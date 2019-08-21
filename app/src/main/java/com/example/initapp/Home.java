@@ -30,6 +30,7 @@ import com.example.initapp.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +63,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     BottomNavigationView bottomNavigationView;
     TextView username;
     private static final String TAG = "Home";
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         Crashlytics.log(Log.DEBUG, TAG, "Crash");
         read();
         initui();
+        firebaseAuth = FirebaseAuth.getInstance();
         Log.i(chk, st_str_account);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -299,6 +302,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 st_str_level = "GUEST";
                 st_str_accountID = "";
                 Toast.makeText(Home.this,"Logout",Toast.LENGTH_SHORT).show();
+                FirebaseAuth.getInstance().signOut();
                 reload();
 
                 break;

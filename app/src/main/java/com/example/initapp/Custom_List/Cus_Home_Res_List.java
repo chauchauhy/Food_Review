@@ -75,9 +75,9 @@ public class Cus_Home_Res_List extends RecyclerView.Adapter<RecyclerView.ViewHol
         String urll = url_all_imageforupload+restaurant.getResImage();
         Picasso.with(layoutInflater.getContext())
                 .load(urll)
-                .placeholder(R.drawable.btn_back)
+                .placeholder(R.drawable.icon)
                 .fit()
-                .error(R.drawable.btn_add)
+                .error(R.drawable.icon)
                 .into( home_list.res_image);
         Log.i("httpul",url_all_image+restaurant.getResImage());
         home_list.res_name.setText(restaurant.getResName());

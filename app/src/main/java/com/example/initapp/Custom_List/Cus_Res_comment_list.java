@@ -61,9 +61,9 @@ public class Cus_Res_comment_list extends RecyclerView.Adapter<RecyclerView.View
             res_cm_vh.cus_post_image.setVisibility(View.VISIBLE);
             Picasso.with(layoutInflater.getContext())
                     .load(urll)
-                    .placeholder(R.drawable.btn_back)
+                    .placeholder(R.drawable.icon)
                     .fit()
-                    .error(R.drawable.btn_add)
+                    .error(R.drawable.icon)
                     .into(res_cm_vh.cus_post_image);
             Log.i("httpuril", urll);
         }

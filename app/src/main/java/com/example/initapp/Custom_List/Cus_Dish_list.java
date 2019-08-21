@@ -67,7 +67,7 @@ public class Cus_Dish_list extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         Log.i("sadfgh", urll);
         Picasso.with(layoutInflater.getContext())
                 .load(urll)
-                .error(R.drawable.btn_add)
+                .error(R.drawable.icon)
                 .into(dishVh.dish_image);
         dishVh.dish_title.setText(dishes.getDishes_name());
     }

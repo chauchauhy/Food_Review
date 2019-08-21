@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,7 @@ import com.example.initapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {          //sign page
     public Context context;
     public StringRequest stringRequest;
     public RequestQueue requestQueue;
-    private FirebaseAuth mAuth;
+//    private FirebaseAuth mAuth;
     private FirebaseAuth firebaseAuth;
     ArrayList<User> users = new ArrayList<User>();
     private static final String HOME_TAG = "Home";
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity {          //sign page
         setContentView(R.layout.activity_main);
         initui(); //
         read();
-        mAuth = FirebaseAuth.getInstance();
+//        mAuth = FirebaseAuth.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
         Timer timer = new Timer();
@@ -106,7 +108,18 @@ public class MainActivity extends AppCompatActivity {          //sign page
         send.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-
+                if(chknull()) {
+                    firebaseAuth.createUserWithEmailAndPassword(useremail.getText().toString().trim(), userpassword.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(MainActivity.this, "Sign up !", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, "it seem that it cannot signupXD", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
 
                 return true;
             }
@@ -204,7 +217,7 @@ public class MainActivity extends AppCompatActivity {          //sign page
         } else {
             war_ac.setVisibility(View.GONE);
         }
-        if (userpassword.getText().toString().trim().length() < 5) {
+        if (userpassword.getText().toString().trim().length() < 7) {
             war_pw.setVisibility(View.VISIBLE);
             boolean_result = false;
         } else {
@@ -216,7 +229,8 @@ public class MainActivity extends AppCompatActivity {          //sign page
         } else {
             war_email.setVisibility(View.GONE);
         }
-        if (username.getText().toString().trim().length() > 3 && useraccount.getText().toString().trim().length() > 5 && userpassword.getText().toString().trim().length() > 5 && useremail.getText().toString().trim().length() > 7
+        if (username.getText().toString().trim().length() > 3 && useraccount.getText().toString().trim().length() > 5 && userpassword.getText().toString().trim().length() > 5 &&
+                useremail.getText().toString().trim().length() > 7
                 && useremail.getText().toString().trim().contains("@") && useremail.getText().toString().trim().contains(".com")) {
             boolean_result = true;
         }
