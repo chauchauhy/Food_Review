@@ -70,5 +70,15 @@ dependencies {
     //new
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
-//    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    implementation 'com.google.firebase:firebase-ml-vision:21.0.0'
+    // Permission handling library
+    implementation 'com.karumi:dexter:4.2.0'
+
+    // Image loading library
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:18.0.0'
+    implementation 'com.google.firebase:firebase-ml-model-interpreter:20.0.0'
+//    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:17.0.2'
+//    implementation 'com.google.firebase:firebase-ml-vision-face-model:17.0.2'
+//    implementation 'com.google.firebase:firebase-ml-model-interpreter:18.0.0'
 }

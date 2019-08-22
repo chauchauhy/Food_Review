@@ -30,6 +30,8 @@ import com.example.initapp.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
@@ -64,12 +66,15 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     TextView username;
     private static final String TAG = "Home";
     FirebaseAuth firebaseAuth;
+  public static FirebaseAnalytics firebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        FirebaseApp.initializeApp(this);
         Crashlytics.log(Log.DEBUG, TAG, "Crash");
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         read();
         initui();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -79,7 +84,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.nav_add:
-                        if (st_str_level.equals("admin")) {
+                        if (st_str_level.equals("admin")||st_str_level.equals("super member")) {
                             startActivity(new Intent(Home.this, AddRestaurant.class));
                         } else {
                             Toast.makeText(Home.this, "You can not use this function", Toast.LENGTH_SHORT).show();
@@ -92,6 +97,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                         } else {
                             Toast.makeText(Home.this, "You may be need login", Toast.LENGTH_SHORT).show();
                         }
+                        break;
                 }
 
 
@@ -283,6 +289,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     public boolean onNavigationItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+            case R.id.nav_social:
+                Bundle bundle = new Bundle();
+                bundle.putLong("time",System.currentTimeMillis());
+                bundle.putString("key","time");
+                firebaseAnalytics.logEvent("click_soical",bundle);
+startActivity(new Intent(Home.this,Social.class));
+
+                break;
             case R.id.signup:
                 startActivity(new Intent(Home.this, MainActivity.class));
                 break;

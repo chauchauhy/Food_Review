@@ -4,11 +4,14 @@
 
     <item
         android:id="@+id/nav_social"
-        android:title="Social Media" />
+        android:title="Premium" />
     <item
         android:id="@+id/nav_chpassword"
         android:title="Change Password"
         android:visible="false"/>
+    <item android:id="@+id/homepage"
+        android:title="Home"
+        />
     <item
         android:id="@+id/logout"
         android:title="Logout"
@@ -18,9 +21,7 @@
         android:title="Login"
         android:visible="false"
         />
-    <item android:id="@+id/homepage"
-        android:title="Home"
-        />
+
     <item android:id="@+id/order"
         android:title="Order"
         />

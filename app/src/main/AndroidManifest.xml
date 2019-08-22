@@ -4,6 +4,14 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
+    <!--<uses-permission android:name="android.permission.INTERNET"/>-->
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
+    <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>-->
+
+    <!--<uses-permission android:name="android.permission.CAMERA"/>-->
+    <!--<uses-feature android:name="android.hardware.camera.autofocus" />-->
+    <!--<uses-feature android:name="android.hardware.camera" android:required="true" />-->
 
     <application
         android:allowBackup="true"
@@ -12,8 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".Profolio"></activity>
+        <activity android:name=".Social"></activity>
+        <activity android:name=".Profolio" />
         <activity android:name=".AddReview" />
         <activity android:name=".AddRestaurant" />
         <activity android:name=".Comment_res" />
@@ -46,6 +54,7 @@
         </service>
 
         <activity android:name=".MainActivity" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -57,7 +66,8 @@
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
-            <intent-filter><action android:name="android.intent.action.VIEW" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -65,8 +75,12 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="label" />
+        <!--<meta-data-->
+            <!--android:name="com.google.firebase.ml.vision.DEPENDENCIES"-->
+            <!--android:value="label" />-->
     </application>
-
 
 </manifest>

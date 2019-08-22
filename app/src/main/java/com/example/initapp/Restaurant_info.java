@@ -1,7 +1,9 @@
 package com.example.initapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -30,6 +33,8 @@ import com.example.initapp.model.Res_Info;
 import com.example.initapp.model.Restaurant;
 import com.example.initapp.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -42,6 +47,7 @@ import static android.util.Log.i;
 import static com.example.initapp.Home.resID;
 import static com.example.initapp.SetUp.st_str_account;
 import static com.example.initapp.SetUp.st_str_accountID;
+import static com.example.initapp.SetUp.st_str_level;
 import static com.example.initapp.SetUp.url_RES;
 import static com.example.initapp.SetUp.url_all_get;
 import static com.example.initapp.SetUp.url_all_image;
@@ -50,7 +56,7 @@ import static com.example.initapp.SetUp.url_comment_res;
 import static com.example.initapp.SetUp.url_like;
 import static com.example.initapp.SetUp.url_res_info;
 
-public class Restaurant_info extends AppCompatActivity implements Cus_Res_comment_list.OnItemClickListener {
+public class Restaurant_info extends AppCompatActivity implements Cus_Res_comment_list.OnItemClickListener, NavigationView.OnNavigationItemSelectedListener {
     ImageView star1, star2, star3, star4, star5, Res_ImageView, like_image;
     TextView Res_des, Res_Con, Res_Name, Res_info, Res_comment, Res_deatil, Dishes;
     ImageButton Image_Like;
@@ -66,6 +72,10 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
     View subview;
     BottomNavigationView bottomNavigationView;
     String name, rate;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    ActionBarDrawerToggle toggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +83,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         setContentView(R.layout.activity_restaurant_info);
         initui();
         read();
+        context = this;
 
 
         Intent i = getIntent();
@@ -102,10 +113,132 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         });
     }
 
+    private void initui() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        drawerLayout = findViewById(R.id.drawer_resinfo);
+        navigationView = findViewById(R.id.Nav_reinfo);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.getMenu().findItem(R.id.login).setVisible(true);
+
+        if (st_str_account.length() < 1) {
+            navigationView.getMenu().findItem(R.id.order).setVisible(false);
+
+        } else {
+            navigationView.getMenu().findItem(R.id.login).setVisible(false);
+            navigationView.getMenu().findItem(R.id.logout).setVisible(true);
+
+        }
+
+
+        star1 = findViewById(R.id.imageView7);
+        star2 = findViewById(R.id.imageView9);
+        star3 = findViewById(R.id.imageView10);
+        star4 = findViewById(R.id.imageView11);
+        star5 = findViewById(R.id.imageView6);
+        bottomNavigationView = findViewById(R.id.nav_bar_resinfo);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.nav_home:
+                        startActivity(new Intent(Restaurant_info.this, Home.class));
+                        break;
+
+                    case R.id.nav_add:
+                        if (st_str_accountID.length() < 1) {
+                            Toast.makeText(Restaurant_info.this, "You need login to use this function", Toast.LENGTH_SHORT).show();
+                        } else {
+                            startActivity(new Intent(Restaurant_info.this, AddReview.class).putExtra(resID, RES_ID).putExtra("NAME", name).putExtra("RATE", rate));
+                        }
+                        break;
+                    case R.id.nav_profile:
+                        if (st_str_account.length() > 4) {
+                            startActivity(new Intent(Restaurant_info.this, Profolio.class));
+                            break;
+                        } else {
+                            Toast.makeText(Restaurant_info.this, "You may be need login", Toast.LENGTH_SHORT).show();
+                        }
+
+                }
+                return true;
+            }
+        });
+
+
+        Dishes = findViewById(R.id.imageView4);
+        Res_ImageView = findViewById(R.id.imageView3);
+
+        Res_des = findViewById(R.id.textView5);
+        Res_Name = findViewById(R.id.textView7);
+        Res_Con = findViewById(R.id.textView6);
+        Res_info = findViewById(R.id.textView8);
+        Res_info.setClickable(true);
+        Res_comment = findViewById(R.id.textView9);
+        Res_comment.setClickable(true);
+
+        Image_Like = findViewById(R.id.imageButton14);
+        recyclerView = findViewById(R.id.Res_info_recy);
+        Res_deatil = findViewById(R.id.textView);
+        recyclerView.setVisibility(View.GONE);
+        like_image = findViewById(R.id.imageButton15);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_social:
+                startActivity(new Intent(context, Social.class));
+
+                break;
+            case R.id.homepage:
+                startActivity(new Intent(context, Home.class));
+                break;
+            case R.id.signup:
+                startActivity(new Intent(context, MainActivity.class));
+                break;
+            case R.id.login:
+                startActivity(new Intent(context, login.class));
+                break;
+
+            case R.id.order:
+                if (st_str_accountID.length() < 1) {
+                    Toast.makeText(context, "You need login to use this function", Toast.LENGTH_SHORT).show();
+                } else {
+                    startActivity(new Intent(context, Order.class));
+                }
+                break;
+            case R.id.logout:
+                st_str_account = "";
+                st_str_level = "GUEST";
+                st_str_accountID = "";
+                Toast.makeText(context, "Logout", Toast.LENGTH_SHORT).show();
+                FirebaseAuth.getInstance().signOut();
+                reload();
+
+                break;
+
+        }
+
+        return true;
+    }
+
+
     private void read() {
         get get1 = new get();
         get1.execute(url_all_get + url_RES, url_all_get + url_res_info, url_all_get + url_like, url_all_get + url_comment_res);
-        Log.i("Loing",  comment_restaurants.size()+ RES_ID);
+        Log.i("Loing", comment_restaurants.size() + RES_ID);
 
     }
 
@@ -113,13 +246,14 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
     public void onItemClick(int position) {
     }
 
+
     private class get extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {
             volley_get(strings[0]);
             volley_get_like(strings[2]);
             volley_get_comment(strings[3]);
-            Log.i("Loing",  comment_restaurants.size()+ RES_ID);
+            Log.i("Loing", comment_restaurants.size() + RES_ID);
             return strings[0];
         }
     }
@@ -196,9 +330,9 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
                 String CM_RES_IMAGE = j.getString("CM_RES_IMAGE");
 
                 if (CM_RES_ID.equals(RES_ID)) {
-                    Comment_Restaurant comment_restaurant = new Comment_Restaurant(id,CM_RES_ID,CM_USER_ID,CM_USER_NAME,CM_TITLE,CM_CONTENT,CM_TIME,CM_RES_IMAGE);
+                    Comment_Restaurant comment_restaurant = new Comment_Restaurant(id, CM_RES_ID, CM_USER_ID, CM_USER_NAME, CM_TITLE, CM_CONTENT, CM_TIME, CM_RES_IMAGE);
                     comment_restaurants.add(comment_restaurant);
-                    Log.i("debuging",comment_restaurant.toString());
+                    Log.i("debuging", comment_restaurant.toString());
                 }
 
             }
@@ -206,13 +340,12 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
             recyclerView.setAdapter(cus_res_comment_list);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             cus_res_comment_list.setOnItemClickListener(Restaurant_info.this);
-            Log.i("Loing",  comment_restaurants.size()+ RES_ID);
+            Log.i("Loing", comment_restaurants.size() + RES_ID);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
 
     private void jsonlike(String json) {
         try {
@@ -246,8 +379,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         }
     }
 
-
-//    private void jsontoarrde(String json){
+    //    private void jsontoarrde(String json){
 //        i("jsona", json);
 //        try {
 //            JSONObject root = new JSONObject(json);
@@ -275,7 +407,6 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
 //            e.printStackTrace();
 //        }
 //    }
-
     private void setuidetail(String phone, String address, String time, String price) {
         String n1 = "PHONE : ";
         String n2 = "Address : ";
@@ -328,60 +459,6 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
         }
     }
 
-
-    private void initui() {
-        star1 = findViewById(R.id.imageView7);
-        star2 = findViewById(R.id.imageView9);
-        star3 = findViewById(R.id.imageView10);
-        star4 = findViewById(R.id.imageView11);
-        star5 = findViewById(R.id.imageView6);
-        bottomNavigationView = findViewById(R.id.nav_bar_resinfo);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.nav_home:
-                        startActivity(new Intent(Restaurant_info.this, Home.class));
-                        break;
-
-                    case R.id.nav_add:
-                        if(st_str_accountID.length()<1){
-                            Toast.makeText(Restaurant_info.this,"You need login to use this function",Toast.LENGTH_SHORT).show();
-                        }else {
-                            startActivity(new Intent(Restaurant_info.this, AddReview.class).putExtra(resID, RES_ID).putExtra("NAME", name).putExtra("RATE", rate));
-                        }
-                        break;
-                    case R.id.nav_profile:
-                        if (st_str_account.length() > 4) {
-                            startActivity(new Intent(Restaurant_info.this,Profolio.class));
-                            break;
-                        }else {
-                            Toast.makeText(Restaurant_info.this,"You may be need login",Toast.LENGTH_SHORT).show();
-                        }
-
-                }
-                return true;
-            }
-        });
-
-
-        Dishes = findViewById(R.id.imageView4);
-        Res_ImageView = findViewById(R.id.imageView3);
-
-        Res_des = findViewById(R.id.textView5);
-        Res_Name = findViewById(R.id.textView7);
-        Res_Con = findViewById(R.id.textView6);
-        Res_info = findViewById(R.id.textView8);
-        Res_info.setClickable(true);
-        Res_comment = findViewById(R.id.textView9);
-        Res_comment.setClickable(true);
-
-        Image_Like = findViewById(R.id.imageButton14);
-        recyclerView = findViewById(R.id.Res_info_recy);
-        Res_deatil = findViewById(R.id.textView);
-        recyclerView.setVisibility(View.GONE);
-        like_image = findViewById(R.id.imageButton15);
-    }
 
     private void setui(String mark_st, String imagepath1, String imagepath2, String imagepath3, String Res_Name, String Res_Detail) {
         if (mark_st != null) {
@@ -438,4 +515,16 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
             this.Res_Name.setText(Res_Name);
         }
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+    }
+
+    public void reload() {
+        Intent i = getIntent();
+        finish();
+        startActivity(i);
+    }
+
 }
