@@ -45,7 +45,13 @@
             <!-- </intent-filter> -->
         </activity>
         <activity android:name=".login" />
-        <activity android:name=".ShowRes" />
+        <activity android:name=".ShowRes" >
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
 
         <service android:name=".firebaseSDK.Firebase_Cloud_Message">
             <intent-filter>
@@ -77,7 +83,7 @@
         </activity>
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-            android:value="label" />
+            android:value="ocr" />
         <!--<meta-data-->
             <!--android:name="com.google.firebase.ml.vision.DEPENDENCIES"-->
             <!--android:value="label" />-->

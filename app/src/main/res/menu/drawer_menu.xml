@@ -8,27 +8,29 @@
     <item
         android:id="@+id/nav_chpassword"
         android:title="Change Password"
-        android:visible="false"/>
-    <item android:id="@+id/homepage"
-        android:title="Home"
-        />
+        android:visible="false" />
+    <item
+        android:id="@+id/homepage"
+        android:title="Home" />
     <item
         android:id="@+id/logout"
         android:title="Logout"
-        android:visible="false"/>
+        android:visible="false" />
     <item
         android:id="@+id/login"
         android:title="Login"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/order"
+        android:title="Order" />
+    <item
+        android:id="@+id/signup"
+        android:title="Sign up" />
+    <item
+        android:id="@+id/mlkit"
         android:visible="false"
-        />
-
-    <item android:id="@+id/order"
-        android:title="Order"
-        />
-    <item android:id="@+id/signup"
-        android:title="Sign up"
-        />
-
+        android:title="mlkit" />
 
 
 </menu>

@@ -253,6 +253,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navigationView.getMenu().findItem(R.id.homepage).setVisible(false);
+        navigationView.getMenu().findItem(R.id.mlkit).setVisible(true);
         bottomNavigationView = findViewById(R.id.btm_nav_bar);
         bottomNavigationView.getMenu().findItem(R.id.nav_home).setEnabled(false).setChecked(true).setIcon(R.drawable.ic_home_black_24dp);
 
@@ -319,6 +320,9 @@ startActivity(new Intent(Home.this,Social.class));
                 FirebaseAuth.getInstance().signOut();
                 reload();
 
+                break;
+            case R.id.mlkit:
+                startActivity(new Intent(context,ShowRes.class));
                 break;
 
         }
