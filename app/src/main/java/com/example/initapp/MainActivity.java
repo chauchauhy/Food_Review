@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {          //sign page
         if (chk == true) {
             Snackbar.make(linearLayout, "the account or email is existed", Snackbar.LENGTH_SHORT).show();
         }
-        Log.i("ccccccc", String.valueOf(chk));
+        // ("ccccccc", String.valueOf(chk));
         return chk;
     }
 
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {          //sign page
                 + "User_Password=" + userpassword.getText().toString().trim() + "&"
                 + "User_Email= " + useremail.getText().toString().trim() + "&" +
                 "User_Login_Method=Email&User_level=member";
-        Log.i("responsea", po);
+        // ("responsea", po);
         posts.execute(url_all_post + url_User, po);
     }
 
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {          //sign page
                 if (task.getResult() == null)
                     return;
                 String token = task.getResult().getToken();
-                Log.i("TokenMain:", token);
+                // ("TokenMain:", token);
 
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {          //sign page
         protected String doInBackground(String... strings) {
 //            volley_post(strings[0]);
             String rep = postHttpURLConnection(strings[0], strings[1]);
-            Log.i("responsea", rep);
+            // ("responsea", rep);
             return strings[0];
         }
     }
@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity {          //sign page
     private void volley_get(String urll) {
         context = this;
         requestQueue = Volley.newRequestQueue(MainActivity.this);
-        Log.i("uuuu", urll);
+        // ("uuuu", urll);
         stringRequest = new StringRequest(urll, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity {          //sign page
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("RESPOR", error.toString());
+                // ("RESPOR", error.toString());
             }
         });
         requestQueue.add(stringRequest);
@@ -281,12 +281,12 @@ public class MainActivity extends AppCompatActivity {          //sign page
         stringRequest = new StringRequest(Request.Method.POST, urll, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.i("response", response);
+                // ("response", response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("error", error.toString());
+                // ("error", error.toString());
             }
         }) {
             @Override
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity {          //sign page
                 map.put("User_Email", User_Email);
                 map.put("User_Login_Method", "Email");
                 map.put("User_level", "User_level");
-                Log.i("maptoString", map.toString());
+                // ("maptoString", map.toString());
                 return map;
 
 
@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity {          //sign page
     }
 
     private void JsontoArray(String json) {
-        Log.i("jsona", json);
+        // ("jsona", json);
         try {
             JSONObject root = new JSONObject(json);
             JSONArray jsonArray = root.getJSONArray("user");

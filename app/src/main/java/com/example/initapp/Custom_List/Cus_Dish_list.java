@@ -64,7 +64,7 @@ public class Cus_Dish_list extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         final dish_VH dishVh = (dish_VH) holder;
         dishes = Dishess.get(position);
         String urll = url_all_imageforupload + dishes.getDishes_Image();
-        Log.i("sadfgh", urll);
+        // ("sadfgh", urll);
         Picasso.with(layoutInflater.getContext())
                 .load(urll)
                 .error(R.drawable.icon)
@@ -75,10 +75,10 @@ public class Cus_Dish_list extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemCount() {
         if (Dishess == null) {
-            Log.i("Dishess", "value size =:" + String.valueOf(Dishess.size()));
+            // ("Dishess", "value size =:" + String.valueOf(Dishess.size()));
             return 0;
         } else {
-            Log.i("Dishess", "value size =:" + String.valueOf(Dishess.size()));
+            // ("Dishess", "value size =:" + String.valueOf(Dishess.size()));
             return Dishess.size();
         }
     }

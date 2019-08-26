@@ -33,6 +33,14 @@
             android:layout_gravity="center"
 
             android:gravity="center" />
+
+        <Button
+            android:id="@+id/text"
+            android:layout_width="223dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:text="label" />
     </LinearLayout>
 
 </LinearLayout>

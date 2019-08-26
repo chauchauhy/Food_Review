@@ -238,7 +238,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
     private void read() {
         get get1 = new get();
         get1.execute(url_all_get + url_RES, url_all_get + url_res_info, url_all_get + url_like, url_all_get + url_comment_res);
-        Log.i("Loing", comment_restaurants.size() + RES_ID);
+        // ("Loing", comment_restaurants.size() + RES_ID);
 
     }
 
@@ -253,7 +253,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
             volley_get(strings[0]);
             volley_get_like(strings[2]);
             volley_get_comment(strings[3]);
-            Log.i("Loing", comment_restaurants.size() + RES_ID);
+            // ("Loing", comment_restaurants.size() + RES_ID);
             return strings[0];
         }
     }
@@ -332,7 +332,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
                 if (CM_RES_ID.equals(RES_ID)) {
                     Comment_Restaurant comment_restaurant = new Comment_Restaurant(id, CM_RES_ID, CM_USER_ID, CM_USER_NAME, CM_TITLE, CM_CONTENT, CM_TIME, CM_RES_IMAGE);
                     comment_restaurants.add(comment_restaurant);
-                    Log.i("debuging", comment_restaurant.toString());
+                    // ("debuging", comment_restaurant.toString());
                 }
 
             }
@@ -340,7 +340,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
             recyclerView.setAdapter(cus_res_comment_list);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             cus_res_comment_list.setOnItemClickListener(Restaurant_info.this);
-            Log.i("Loing", comment_restaurants.size() + RES_ID);
+            // ("Loing", comment_restaurants.size() + RES_ID);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -360,7 +360,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
 
                 if (resid.equals(RES_ID) && userid.equals(st_str_accountID)) {                  //change userid.eq
                     Like like = new Like(id, resid, userid);
-                    Log.i("saaaaaaaaa", like.getRes_ID() + "xxxxxxxxxxxxx" + like.getUserId());
+                    // ("saaaaaaaaa", like.getRes_ID() + "xxxxxxxxxxxxx" + like.getUserId());
                     setlike(like.getRes_ID(), like.getUserId());
                 }
             }
@@ -443,7 +443,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
                 if (id.equals(RES_ID)) {
 
                     Restaurant restaurant = new Restaurant(id, Res_Name, Res_Detail, Res_Image, Res_Image2, Res_Image3, Res_Like, Res_Mark, Res_Type, phone, Address, Time, Price);
-                    Log.i("restauaaa", restaurant.toString());
+                    // ("restauaaa", restaurant.toString());
                     restaurants.add(restaurant);
                     setui(Res_Mark, Res_Image, Res_Image2, Res_Image3, Res_Name, Res_Detail);
                     this.name = Res_Name;

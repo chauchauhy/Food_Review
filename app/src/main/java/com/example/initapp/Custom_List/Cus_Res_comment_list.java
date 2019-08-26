@@ -65,7 +65,7 @@ public class Cus_Res_comment_list extends RecyclerView.Adapter<RecyclerView.View
                     .fit()
                     .error(R.drawable.icon)
                     .into(res_cm_vh.cus_post_image);
-            Log.i("httpuril", urll);
+            // ("httpuril", urll);
         }
         res_cm_vh.cus_post_author.setText(comment_restaurant.getCm_user_name());
         res_cm_vh.cus_post_content.setText(comment_restaurant.getCm_content());
@@ -79,10 +79,10 @@ public class Cus_Res_comment_list extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemCount() {
         if(comment_restaurants==null){
-            Log.i("comment_restaurants", "value size =:" +  String.valueOf(comment_restaurants.size()));
+            // ("comment_restaurants", "value size =:" +  String.valueOf(comment_restaurants.size()));
             return 0;
         }else {
-            Log.i("comment_restaurants", "value size =:" +  String.valueOf(comment_restaurants.size()));
+            // ("comment_restaurants", "value size =:" +  String.valueOf(comment_restaurants.size()));
             return comment_restaurants.size();
         }
     }

@@ -148,7 +148,7 @@ public class AddRestaurant extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             String rep = postHttpURLConnection(strings[0], strings[1]);
-            Log.i("wwwwwww", rep);
+            // ("wwwwwww", rep);
             response1 = rep;
             return rep;
         }
@@ -167,7 +167,7 @@ public class AddRestaurant extends AppCompatActivity {
         for (int i = 0; i < restaurants.size(); i++) {
             if (name.equals(restaurants.get(i).getResName())) {
                 resid = restaurants.get(i).getResID();
-                Log.i("resid", resid);
+                // ("resid", resid);
                 break;
             }
         }
@@ -241,7 +241,7 @@ public class AddRestaurant extends AppCompatActivity {
                 String Res_Type = j.getString("Res_Type");
 
                 Restaurant restaurant = new Restaurant(id, Res_Name, Res_Detail, Res_Image, Res_Image2, Res_Image3, Res_Like, Res_Mark, Res_Type);
-                Log.i("restau", restaurant.toString());
+                // ("restau", restaurant.toString());
                 this.restaurants.add(restaurant);
             }
 

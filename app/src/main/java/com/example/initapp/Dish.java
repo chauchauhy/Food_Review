@@ -62,7 +62,7 @@ public class Dish extends AppCompatActivity implements BottomNavigationView.OnNa
         context = this;
         Intent i = getIntent();
         resid = i.getStringExtra(resID);
-        Log.i("sadfgh", resid);
+        // ("sadfgh", resid);
 
         initui();
         read();
@@ -183,7 +183,7 @@ public class Dish extends AppCompatActivity implements BottomNavigationView.OnNa
     private void read() {
         get gett = new get();
         gett.execute(url_all_get + url_dishes);
-        Log.i("sadfgh", url_all_get + url_dishes);
+        // ("sadfgh", url_all_get + url_dishes);
     }
 
     private class get extends AsyncTask<String, Void, String> {
@@ -200,13 +200,13 @@ public class Dish extends AppCompatActivity implements BottomNavigationView.OnNa
         stringRequest = new StringRequest(urll, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.i("checkdishes", response);
+                // ("checkdishes", response);
                 jsontoarray_dishes(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("errormessagefo volley", error.toString());
+                // ("errormessagefo volley", error.toString());
 
             }
         });

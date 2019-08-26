@@ -50,10 +50,10 @@ public class Cus_Order_list extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemCount() {
         if(order_lists==null){
-            Log.i("order_lists", "value size =:" +  String.valueOf(order_lists.size()));
+            // ("order_lists", "value size =:" +  String.valueOf(order_lists.size()));
             return 0;
         }else {
-            Log.i("order_lists", "value size =:" +  String.valueOf(order_lists.size()));
+            // ("order_lists", "value size =:" +  String.valueOf(order_lists.size()));
             return order_lists.size();
         }
     }

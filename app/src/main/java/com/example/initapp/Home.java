@@ -78,7 +78,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         read();
         initui();
         firebaseAuth = FirebaseAuth.getInstance();
-        Log.i(chk, st_str_account);
+        // (chk, st_str_account);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -115,8 +115,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public void onItemClick(int position) {
         Intent i = new Intent(Home.this, Restaurant_info.class);
-        Log.i("sssssss", String.valueOf(restaurants.size()));
-        Log.i("sssssss", String.valueOf(clone_res.size()));
+        // ("sssssss", String.valueOf(restaurants.size()));
+        // ("sssssss", String.valueOf(clone_res.size()));
         i.putExtra(resID, clone_res.get(position).getResID());
         startActivity(i);
     }
@@ -151,7 +151,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     private void JsontoArray(String json) {
-        Log.i("jsona", json);
+        // ("jsona", json);
         try {
             JSONObject root = new JSONObject(json);
             JSONArray jsonArray = root.getJSONArray("user");
@@ -172,7 +172,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 if ((User_Name.equals(st_str_account))) {
                     st_str_accountID = id;
                     st_str_level = User_level;
-                    Log.i("sssssssss", id + st_str_account);
+                    // ("sssssssss", id + st_str_account);
                 }
             }
 
@@ -221,7 +221,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 String Res_Type = j.getString("Res_Type");
 
                 Restaurant restaurant = new Restaurant(id, Res_Name, Res_Detail, Res_Image, Res_Image2, Res_Image3, Res_Like, Res_Mark, Res_Type);
-                Log.i("restau", restaurant.toString());
+                // ("restau", restaurant.toString());
                 this.restaurants.add(restaurant);
             }
             clone_res = restaurants;

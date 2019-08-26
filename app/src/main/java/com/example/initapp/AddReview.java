@@ -119,7 +119,7 @@ String nameofres;
                 st_str_accountID +  "&" + "CM_USER_NAME="+st_str_account  +  "&" +"CM_TITLE=" +
                 ed_title.getText().toString().trim() +  "&" + "CM_CONTENT=" + content.getText().toString().trim()
                 ;
-        Log.i("showwssad",parmas);
+        // ("showwssad",parmas);
         post post1 = new post();
         post1.execute(url_all_post+url_comment_res,parmas);
 
@@ -214,7 +214,7 @@ String nameofres;
                 data.put("CM_USER_NAME",st_str_account);
                 data.put("CM_TITLE",ed_title.getText().toString().trim());
                 data.put("CM_CONTENT",content.getText().toString().trim());
-                Log.i("pathname",String.valueOf(filePath)+url_all_post+url_postimage);
+                // ("pathname",String.valueOf(filePath)+url_all_post+url_postimage);
 
                 String result = rh.postRequest(url_all_post+url_postimage,data);
                 return result;

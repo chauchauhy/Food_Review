@@ -35,6 +35,8 @@ import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
+import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
+import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 import com.google.firebase.ml.vision.text.RecognizedLanguage;
@@ -51,7 +53,7 @@ import static com.example.initapp.SetUp.url_all_get;
 
 public class ShowRes extends AppCompatActivity {
     ImageView test;
-    Button select, label;
+    Button select, label,text;
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
     private Uri filePath;
@@ -84,8 +86,43 @@ public class ShowRes extends AppCompatActivity {
 
             }
         });
+        text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
+                imageLabe(firebaseVisionImage);
+            }
+        });
 
     }
+    private void imageLabe(FirebaseVisionImage image){
+        FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance()
+                .getOnDeviceImageLabeler();
+        labeler.processImage(image).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
+            @Override
+            public void onSuccess(List<FirebaseVisionImageLabel> firebaseVisionImageLabels) {
+                String text_final = "";
+                String text_na = " It maybe is ";
+                for (FirebaseVisionImageLabel label: firebaseVisionImageLabels) {
+                    String text = label.getText();
+                    String entityId = label.getEntityId();
+                    float confidence = label.getConfidence();
+                    text_final = text_final + "  "  + text ;
+                }
+                String label = firebaseVisionImageLabels.get(0).getText();
+                createdialog(text_na+label);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                String text = "Failed";
+                createdialog(text);
+            }
+        });
+
+        }
+
 
     private void recognizeText(FirebaseVisionImage image) {
 
@@ -101,7 +138,7 @@ public class ShowRes extends AppCompatActivity {
                             @Override
                             public void onSuccess(FirebaseVisionText firebaseVisionText) {
                                 // Task completed successfully
-                                Log.i("SUCCESSTEXT", firebaseVisionText.toString());
+                                // ("SUCCESSTEXT", firebaseVisionText.toString());
                                 // [START_EXCLUDE]
                                 // [START get_text]
                                 String text = "";
@@ -127,7 +164,7 @@ public class ShowRes extends AppCompatActivity {
                                     }
 
                                 }
-                                Log.i("SUCCESSTEXT", text.toString());
+                                // ("SUCCESSTEXT", text.toString());
                                 createdialog(text);
 
 
@@ -178,16 +215,18 @@ public class ShowRes extends AppCompatActivity {
 //                        }
 //                    });
     private void createdialog(String text){
-        new AlertDialog.Builder(context).setTitle("The Text from Image ").setMessage("MESSAGE =   " + text ).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        }).setNegativeButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            new AlertDialog.Builder(context).setTitle("The Text from Image ").setMessage("MESSAGE =   " + text).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            }).setNegativeButton("Confirm", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
 
-            }
-        }).show();
+                }
+            }).show();
+
+
     }
 
     private void processTextBlock(FirebaseVisionText result) {
@@ -220,6 +259,9 @@ public class ShowRes extends AppCompatActivity {
         test = findViewById(R.id.image_label);
         select = findViewById(R.id.select);
         label = findViewById(R.id.label);
+        label.setText("The Text ");
+        text = findViewById(R.id.text);
+
     }
 
     @Override

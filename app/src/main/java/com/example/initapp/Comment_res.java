@@ -20,7 +20,7 @@ public class Comment_res extends AppCompatActivity {
         RES_ID = i.getStringExtra(resID);
         CMID = i.getStringExtra("CMID");
 
-        Log.i( "XXXXXXXXX", RES_ID + "xxxxxxx"+ CMID);
+        // ( "XXXXXXXXX", RES_ID + "xxxxxxx"+ CMID);
     }
 
 

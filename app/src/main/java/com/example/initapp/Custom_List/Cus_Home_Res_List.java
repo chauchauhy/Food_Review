@@ -79,7 +79,7 @@ public class Cus_Home_Res_List extends RecyclerView.Adapter<RecyclerView.ViewHol
                 .fit()
                 .error(R.drawable.icon)
                 .into( home_list.res_image);
-        Log.i("httpul",url_all_image+restaurant.getResImage());
+        // ("httpul",url_all_image+restaurant.getResImage());
         home_list.res_name.setText(restaurant.getResName());
         home_list.res_detail.setText(restaurant.getResDetail());
 
@@ -89,10 +89,10 @@ public class Cus_Home_Res_List extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemCount() {
          if(restaurants==null){
-             Log.i("comments", "value size =:" +  String.valueOf(restaurants.size()));
+             // ("comments", "value size =:" +  String.valueOf(restaurants.size()));
              return 0;
         }else {
-             Log.i("comments", "value size =:" +  String.valueOf(restaurants.size()));
+             // ("comments", "value size =:" +  String.valueOf(restaurants.size()));
              return restaurants.size();
          }
     }

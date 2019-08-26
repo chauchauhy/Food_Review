@@ -24,8 +24,8 @@ public class Firebase_Cloud_Message extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         if (remoteMessage.getNotification() != null) {
-            Log.i("message title", "MessageFirebase ;" + remoteMessage.getNotification().getTitle());
-            Log.i("message body", "MessageFirebase ;" + remoteMessage.getNotification().getBody());
+            // ("message title", "MessageFirebase ;" + remoteMessage.getNotification().getTitle());
+            // ("message body", "MessageFirebase ;" + remoteMessage.getNotification().getBody());
             sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
 
         }
@@ -35,8 +35,7 @@ public class Firebase_Cloud_Message extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
-        if (s != null)
-            Log.i("NewToken ", "Token    ;" + s);
+            // ("NewToken ", "Token    ;" + s);
     }
 
         private void sendNotification (String messageTitle , String messageBody){
