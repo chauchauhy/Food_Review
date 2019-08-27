@@ -88,6 +88,7 @@ public class Restaurant_info extends AppCompatActivity implements Cus_Res_commen
 
         Intent i = getIntent();
         RES_ID = i.getStringExtra(resID);
+        Log.i("ertyujnb cfrtyui",RES_ID);
 
         Dishes.setClickable(true);
         Dishes.setOnClickListener(new View.OnClickListener() {

@@ -82,6 +82,8 @@ public class Profolio extends AppCompatActivity implements BottomNavigationView.
         drawerLayout = findViewById(R.id.drawer_pro);
         bottomNavigationView = findViewById(R.id.btm_nav_bar_pro);
         navigationView = findViewById(R.id.nav_pro);
+
+
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

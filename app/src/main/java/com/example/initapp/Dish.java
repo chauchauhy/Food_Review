@@ -83,6 +83,9 @@ public class Dish extends AppCompatActivity implements BottomNavigationView.OnNa
         toggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
         bottomNavigationView.getMenu().findItem(R.id.nav_add).setEnabled(false);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -43,6 +43,19 @@ public class SetUp extends AppCompatActivity {
     public static String st_str_account = "";
     public static String st_str_accountID = "";
     public static String st_str_level= "";
+    public static String st_str_type = "type";
+    public static String st_str_type_thai = "Thai";
+    public static String st_str_type_ff = "FastFood";
+    public static String st_str_type_Dessert = "Dessert";
+    public static String st_str_type_Japen = "Japan";
+    public static String st_str_type_Korea = "Korea";
+    public static String st_str_type_ltalian = "Italian";
+    public static String st_str_type_Western = "Western";
+    public static String st_str_type_DimSum = "DimSum";
+
+
+
+
     public static ArrayList<Dishes> dishesArrayList = new ArrayList<Dishes>();
 
 

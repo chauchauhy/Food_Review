@@ -57,7 +57,7 @@ public class AddRestaurant extends AppCompatActivity {
     public ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
     static String response1;
     String type;
-    final static String[] type1 = {"Thai", "TW", "Other"};
+    final static String[] type1 = {"Thai", "FastFood", "Dessert","Japan","Korea","Italian","Western","DimSum"};
 
 
     @Override

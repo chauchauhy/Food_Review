@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +47,14 @@ import static com.example.initapp.SetUp.chk;
 import static com.example.initapp.SetUp.st_str_account;
 import static com.example.initapp.SetUp.st_str_accountID;
 import static com.example.initapp.SetUp.st_str_level;
+import static com.example.initapp.SetUp.st_str_type_Dessert;
+import static com.example.initapp.SetUp.st_str_type_DimSum;
+import static com.example.initapp.SetUp.st_str_type_Japen;
+import static com.example.initapp.SetUp.st_str_type_Korea;
+import static com.example.initapp.SetUp.st_str_type_Western;
+import static com.example.initapp.SetUp.st_str_type_ff;
+import static com.example.initapp.SetUp.st_str_type_ltalian;
+import static com.example.initapp.SetUp.st_str_type_thai;
 import static com.example.initapp.SetUp.url_RES;
 import static com.example.initapp.SetUp.url_User;
 import static com.example.initapp.SetUp.url_all_get;
@@ -61,6 +71,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private Cus_Home_Res_List cus_home_res_list;
     public ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
     public ArrayList<Restaurant> clone_res = new ArrayList<Restaurant>();
+    ImageButton thai,ff,des,japan,korea,italian,western,ds;
     public ArrayList<User> users = new ArrayList<User>();
     BottomNavigationView bottomNavigationView;
     TextView username;
@@ -77,6 +88,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         read();
         initui();
+        String token  = String.valueOf(FirebaseInstanceId.getInstance());
+        Log.i("sdfghj",token + "  @@");
+
         firebaseAuth = FirebaseAuth.getInstance();
         // (chk, st_str_account);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -104,6 +118,92 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 return true;
             }
         });
+        thai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("time",System.currentTimeMillis());
+                bundle.putString("key","time");
+                firebaseAnalytics.logEvent("click_Res_type_thai",bundle);
+                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_thai));
+            }
+        });
+        ff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("time",System.currentTimeMillis());
+                bundle.putString("key","time");
+                firebaseAnalytics.logEvent("click_Res_type_fastfood",bundle);
+                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_ff));
+            }
+        });
+        des.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("time",System.currentTimeMillis());
+                bundle.putString("key","time");
+                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_Dessert,bundle);
+                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_Dessert));
+            }
+        });
+        japan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("time",System.currentTimeMillis());
+                bundle.putString("key","time");
+                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_Japen,bundle);
+
+                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_Japen));
+            }
+        });
+        korea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("time",System.currentTimeMillis());
+                bundle.putString("key","time");
+                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_Korea,bundle);
+
+                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_Korea));
+            }
+        });
+        italian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("time",System.currentTimeMillis());
+                bundle.putString("key","time");
+                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_ltalian,bundle);
+
+                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_ltalian));
+            }
+        });
+        ds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("time",System.currentTimeMillis());
+                bundle.putString("key","time");
+                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_DimSum,bundle);
+
+                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_DimSum));
+            }
+        });
+        western.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("time",System.currentTimeMillis());
+                bundle.putString("key","time");
+                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_Western,bundle);
+
+                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_Western));
+            }
+        });
+
     }
 
     private void read() {
@@ -200,7 +300,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         requestQueue.add(stringRequest);
     }
 
-
     private void jsontoarr(String json) {
         i("jsona", json);
         try {
@@ -239,6 +338,15 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     private void initui() {
         mDrawerlayout = findViewById(R.id.drawer);
+        thai = findViewById(R.id.imageButton);
+        ff = findViewById(R.id.imageButton2);
+        ds = findViewById(R.id.imageButton3);
+        des = findViewById(R.id.imageButton5);
+        japan = findViewById(R.id.imageButton8);
+        korea = findViewById(R.id.imageButton6);
+        italian = findViewById(R.id.imageButton7);
+        western = findViewById(R.id.imageButton4);
+
         mToggle = new ActionBarDrawerToggle(this, mDrawerlayout, R.string.open, R.string.close);
         navigationView = findViewById(R.id.Nav_home);
         mDrawerlayout.addDrawerListener(mToggle);
@@ -340,4 +448,8 @@ startActivity(new Intent(Home.this,Social.class));
         finish();
         startActivity(i);
     }
+
+
+
+
 }
