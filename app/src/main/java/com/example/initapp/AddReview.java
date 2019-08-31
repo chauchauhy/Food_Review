@@ -49,13 +49,13 @@ import static com.example.initapp.SetUp.url_postimage;
 
 public class AddReview extends AppCompatActivity {
     TextView title;
-    EditText content,ed_title;
+    EditText content, ed_title;
     ImageButton post;
     BottomNavigationView bottomNavigationView;
     Boolean like;
     String restitle;
     ProgressBar progressBar;
-String nameofres;
+    String nameofres;
     ////////////////////////////////////////////////////////////
     ImageView test;
     Button button;
@@ -76,32 +76,32 @@ String nameofres;
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         Intent i = getIntent();
-        restitle =  i.getStringExtra("NAME");
+        restitle = i.getStringExtra("NAME");
         ressID = i.getStringExtra(resID);
         initui();
 
         post.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                                    @Override
+                                    public void onClick(View view) {
 //                Intent intent = new Intent();
 //                intent.setType("image/*");
 //                intent.setAction(Intent.ACTION_GET_CONTENT);
 //                startActivityForResult(Intent.createChooser(intent, "Select Image From Gallery"), 1);
-                if (title.getText().toString().trim().length() > 1 && content.getText().toString().trim().length() > 1) {
-                    if (filePath != null) {
-                        uploadImage();
-                        startActivity(new Intent(AddReview.this,Restaurant_info.class).putExtra(resID,ressID));
-                    } else {
-                        read();
-                        startActivity(new Intent(AddReview.this,Restaurant_info.class).putExtra(resID,ressID));
+                                        if (title.getText().toString().trim().length() > 1 && content.getText().toString().trim().length() > 1) {
+                                            if (filePath != null) {
+                                                uploadImage();
+                                                startActivity(new Intent(AddReview.this, Restaurant_info.class).putExtra(resID, ressID));
+                                            } else {
+                                                read();
+                                                startActivity(new Intent(AddReview.this, Restaurant_info.class).putExtra(resID, ressID));
 
-                    }
-                }else{
-                        Toast.makeText(AddReview.this,"Please fill the from",Toast.LENGTH_SHORT).show();
-                }
-            }
+                                            }
+                                        } else {
+                                            Toast.makeText(AddReview.this, "Please fill the from", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
 
-        }
+                                }
         );
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,41 +111,29 @@ String nameofres;
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Image From Gallery"), 1);
 
-        }
-            });
+            }
+        });
     }
-    private void read(){
-        String parmas = "CM_RES_ID=" + ressID + "&" + "CM_RES_NAME=" +  restitle +  "&" +"CM_USER_ID=" +
-                st_str_accountID +  "&" + "CM_USER_NAME="+st_str_account  +  "&" +"CM_TITLE=" +
-                ed_title.getText().toString().trim() +  "&" + "CM_CONTENT=" + content.getText().toString().trim()
-                ;
+
+    private void read() {
+        String parmas = "CM_RES_ID=" + ressID + "&" + "CM_RES_NAME=" + restitle + "&" + "CM_USER_ID=" +
+                st_str_accountID + "&" + "CM_USER_NAME=" + st_str_account + "&" + "CM_TITLE=" +
+                ed_title.getText().toString().trim() + "&" + "CM_CONTENT=" + content.getText().toString().trim();
         // ("showwssad",parmas);
         post post1 = new post();
-        post1.execute(url_all_post+url_comment_res,parmas);
+        post1.execute(url_all_post + url_comment_res, parmas);
 
 
     }
 
-    private class post extends AsyncTask<String , Void ,String>{
+    private class post extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {
-            String reponse = postHttpURLConnection(strings[0],strings[1]);
+            String reponse = postHttpURLConnection(strings[0], strings[1]);
             return reponse;
 
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,31 +158,32 @@ String nameofres;
         }
     }
 
-    public String getStringImage(Bitmap bmp){
+    public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
-    private void uploadImage(){
-        class UploadImage extends AsyncTask<Bitmap,Void,String> {
+
+    private void uploadImage() {
+        class UploadImage extends AsyncTask<Bitmap, Void, String> {
             ProgressDialog loading;
             RequestHandler rh = new RequestHandler();
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(AddReview.this, "Uploading Image", "Please wait...",true,true);
+                loading = ProgressDialog.show(AddReview.this, "Uploading Image", "Please wait...", true, true);
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 loading.dismiss();
-                if(s.length()>1) {
+                if (s.length() > 1) {
                     Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-                }else {
+                } else {
                     Toast.makeText(getApplicationContext(), "The Image has been uploaded", Toast.LENGTH_LONG).show();
 
                 }
@@ -205,18 +194,18 @@ String nameofres;
                 Bitmap bitmap = params[0];
                 String uploadImage = getStringImage(bitmap);
 
-                HashMap<String,String> data = new HashMap<>();
+                HashMap<String, String> data = new HashMap<>();
                 data.put(UPLOAD_KEY, uploadImage);
-                data.put("name",getFileName(filePath));         //connect to php file and input the data
-                data.put("CM_RES_ID",ressID);
-                data.put("CM_RES_NAME",restitle);
-                data.put("CM_USER_ID",st_str_accountID);
-                data.put("CM_USER_NAME",st_str_account);
-                data.put("CM_TITLE",ed_title.getText().toString().trim());
-                data.put("CM_CONTENT",content.getText().toString().trim());
+                data.put("name", getFileName(filePath));         //connect to php file and input the data
+                data.put("CM_RES_ID", ressID);
+                data.put("CM_RES_NAME", restitle);
+                data.put("CM_USER_ID", st_str_accountID);
+                data.put("CM_USER_NAME", st_str_account);
+                data.put("CM_TITLE", ed_title.getText().toString().trim());
+                data.put("CM_CONTENT", content.getText().toString().trim());
                 // ("pathname",String.valueOf(filePath)+url_all_post+url_postimage);
 
-                String result = rh.postRequest(url_all_post+url_postimage,data);
+                String result = rh.postRequest(url_all_post + url_postimage, data);
                 return result;
             }
         }
@@ -225,7 +214,7 @@ String nameofres;
         ui.execute(bitmap);
     }
 
-    String getFileName(Uri uri){
+    String getFileName(Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {
             Cursor cursor = getContentResolver().query(uri, null, null, null, null);
@@ -248,13 +237,6 @@ String nameofres;
     }
 
 
-
-
-
-
-
-
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,11 +245,12 @@ String nameofres;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void post(){
+    private void post() {
         String postcontent = content.getText().toString().trim();
         String parmas = "";
     }
-    private void initui(){
+
+    private void initui() {
         title = findViewById(R.id.textView15);
         content = findViewById(R.id.editText19);
         post = findViewById(R.id.imageButton28);
@@ -284,18 +267,18 @@ String nameofres;
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.nav_home:
-                        startActivity(new Intent(AddReview.this,Home.class));
+                        startActivity(new Intent(AddReview.this, Home.class));
                         break;
                     case R.id.nav_profile:
-                    if (st_str_account.length() > 4) {
-                        startActivity(new Intent(AddReview.this,Profolio.class));
-                        break;
-                    }else {
-                        Toast.makeText(AddReview.this,"You may be need login",Toast.LENGTH_SHORT).show();
-                        break;
-                    }
+                        if (st_str_account.length() > 4) {
+                            startActivity(new Intent(AddReview.this, Profolio.class));
+                            break;
+                        } else {
+                            Toast.makeText(AddReview.this, "You may be need login", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
                     case R.id.nav_social:
                         break;
 

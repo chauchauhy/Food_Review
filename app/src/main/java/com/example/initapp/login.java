@@ -192,11 +192,12 @@ public class login extends AppCompatActivity {
             @Override
             public boolean onLongClick(View view) {
                 if (chknull()) {
-                    firebaseAuth.signInWithEmailAndPassword(Ed_username.getText().toString().trim(), userpassword.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    firebaseAuth.signInWithEmailAndPassword(Ed_username.getText().toString(), userpassword.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
 //                                firebaseauth();
+                                Log.i("TAGfghjkjhgfh",Ed_username.getText().toString()+userpassword.getText().toString() );
                                 Toast.makeText(login.this, "Success login", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(login.this, "PLZ Check you username(email)and Pssword", Toast.LENGTH_SHORT).show();

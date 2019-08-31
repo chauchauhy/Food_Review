@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
@@ -48,6 +49,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.initapp.Home.firebaseAnalytics;
 import static com.example.initapp.SetUp.url_RES;
 import static com.example.initapp.SetUp.url_all_get;
 
@@ -81,16 +83,43 @@ public class ShowRes extends AppCompatActivity {
         label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
-                recognizeText(image);
+                if(bitmap!= null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("time",System.currentTimeMillis());
+                    bundle.putString("Click","time");
+                    firebaseAnalytics.logEvent("Click_MLKIT_TEXT",bundle);
+                    FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
+                    recognizeText(image);
+                }
+                else {
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("time",System.currentTimeMillis());
+                    bundle.putString("Click","time");
+                    firebaseAnalytics.logEvent("Click_MLKIT_TEXT_Fail",bundle);
+
+                    Toast.makeText(ShowRes.this,"You need select a image/picture",Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
-                imageLabe(firebaseVisionImage);
+                if(bitmap!=null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("Click_time",System.currentTimeMillis());
+                    bundle.putString("Click","time");
+                    firebaseAnalytics.logEvent("Click_MLKIT_Label",bundle);
+                    FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
+                    imageLabe(firebaseVisionImage);
+                }else {
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("Click_time",System.currentTimeMillis());
+                    bundle.putString("Click","time");
+                    firebaseAnalytics.logEvent("Click_MLKIT_Label_Faild",bundle);
+                    Toast.makeText(ShowRes.this,"You need select a image/picture",Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
@@ -108,6 +137,7 @@ public class ShowRes extends AppCompatActivity {
                     String entityId = label.getEntityId();
                     float confidence = label.getConfidence();
                     text_final = text_final + "  "  + text ;
+                    Log.i("label_image", "Text = " + text + "    confidence =  " + confidence);
                 }
                 String label = firebaseVisionImageLabels.get(0).getText();
                 createdialog(text_na+label);

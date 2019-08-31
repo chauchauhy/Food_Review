@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -28,6 +30,14 @@ import com.crashlytics.android.Crashlytics;
 import com.example.initapp.Custom_List.Cus_Home_Res_List;
 import com.example.initapp.model.Restaurant;
 import com.example.initapp.model.User;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -71,13 +81,17 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private Cus_Home_Res_List cus_home_res_list;
     public ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
     public ArrayList<Restaurant> clone_res = new ArrayList<Restaurant>();
-    ImageButton thai,ff,des,japan,korea,italian,western,ds;
+    ImageButton thai, ff, des, japan, korea, italian, western, ds;
     public ArrayList<User> users = new ArrayList<User>();
     BottomNavigationView bottomNavigationView;
     TextView username;
     private static final String TAG = "Home";
     FirebaseAuth firebaseAuth;
-  public static FirebaseAnalytics firebaseAnalytics;
+    AdView adview;
+    private InterstitialAd mInterstitialAd;
+
+
+    public static FirebaseAnalytics firebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +99,33 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         setContentView(R.layout.activity_home);
         FirebaseApp.initializeApp(this);
         Crashlytics.log(Log.DEBUG, TAG, "Crash");
+        MobileAds.initialize(this, "ca-app-pub-6917050150194512~1256489198");
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         read();
         initui();
-        String token  = String.valueOf(FirebaseInstanceId.getInstance());
-        Log.i("sdfghj",token + "  @@");
+
+        firebaseAnalytics.setUserProperty("phone Brand " + Build.BRAND, Build.BRAND);
+        firebaseAnalytics.setUserProperty("OS=" + String.valueOf(Build.VERSION.RELEASE), Build.VERSION.RELEASE);
+        firebaseAnalytics.setUserId(Build.BRAND + "  user");
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        adload();
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+//         adview = new AdView(this);
+//        adview.setAdSize(AdSize.BANNER);
+//        adview.setAdUnitId("ca-app-pub-6917050150194512/7434884739");
+        adview = findViewById(R.id.imageView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adview.loadAd(adRequest);
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         // (chk, st_str_account);
@@ -98,7 +134,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.nav_add:
-                        if (st_str_level.equals("admin")||st_str_level.equals("super member")) {
+                        if (st_str_level.equals("admin") || st_str_level.equals("super member")) {
                             startActivity(new Intent(Home.this, AddRestaurant.class));
                         } else {
                             Toast.makeText(Home.this, "You can not use this function", Toast.LENGTH_SHORT).show();
@@ -112,98 +148,187 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                             Toast.makeText(Home.this, "You may be need login", Toast.LENGTH_SHORT).show();
                         }
                         break;
+                    case R.id.nav_home:
+                        if (mInterstitialAd.isLoaded()) {
+                            mInterstitialAd.show();
+                            adload();
+
+                        } else {
+                            reload();
+
+                        }
+                        break;
+
                 }
 
 
                 return true;
             }
         });
+
+
         thai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                firebaseAnalytics.setUserId("user_" + st_str_type_thai);
+                firebaseAnalytics.setUserProperty("user_" + st_str_type_thai, "user");
                 Bundle bundle = new Bundle();
-                bundle.putLong("time",System.currentTimeMillis());
-                bundle.putString("key","time");
-                firebaseAnalytics.logEvent("click_Res_type_thai",bundle);
-                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_thai));
+                bundle.putLong("time", System.currentTimeMillis());
+                bundle.putString("key", "time");
+                firebaseAnalytics.logEvent("click_Res_type_thai", bundle);
+                startActivity(new Intent(context, ResType.class).putExtra("TYPE", st_str_type_thai));
             }
         });
         ff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                firebaseAnalytics.setUserId("user_" + st_str_type_ff);
+                firebaseAnalytics.setUserProperty("user_" + st_str_type_ff, "user");
+
                 Bundle bundle = new Bundle();
-                bundle.putLong("time",System.currentTimeMillis());
-                bundle.putString("key","time");
-                firebaseAnalytics.logEvent("click_Res_type_fastfood",bundle);
-                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_ff));
+                bundle.putLong("time", System.currentTimeMillis());
+                bundle.putString("key", "time");
+                firebaseAnalytics.logEvent("click_Res_type_fastfood", bundle);
+                startActivity(new Intent(context, ResType.class).putExtra("TYPE", st_str_type_ff));
             }
         });
         des.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                firebaseAnalytics.setUserId("user_" + st_str_type_Dessert);
+                firebaseAnalytics.setUserProperty("user_" + st_str_type_Dessert, "user");
+
                 Bundle bundle = new Bundle();
-                bundle.putLong("time",System.currentTimeMillis());
-                bundle.putString("key","time");
-                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_Dessert,bundle);
-                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_Dessert));
+                bundle.putLong("time", System.currentTimeMillis());
+                bundle.putString("key", "time");
+                firebaseAnalytics.logEvent("click_Res_type_" + st_str_type_Dessert, bundle);
+
+                startActivity(new Intent(context, ResType.class).putExtra("TYPE", st_str_type_Dessert));
             }
         });
         japan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putLong("time",System.currentTimeMillis());
-                bundle.putString("key","time");
-                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_Japen,bundle);
+                firebaseAnalytics.setUserId("user_" + st_str_type_Japen);
+                firebaseAnalytics.setUserProperty("user_" + st_str_type_Japen, "user");
 
-                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_Japen));
+                bundle.putLong("time", System.currentTimeMillis());
+                bundle.putString("key", "time");
+                firebaseAnalytics.logEvent("click_Res_type_" + st_str_type_Japen, bundle);
+
+                startActivity(new Intent(context, ResType.class).putExtra("TYPE", st_str_type_Japen));
             }
         });
         korea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putLong("time",System.currentTimeMillis());
-                bundle.putString("key","time");
-                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_Korea,bundle);
+                firebaseAnalytics.setUserId("user_" + st_str_type_Korea);
+                firebaseAnalytics.setUserProperty("user_" + st_str_type_Korea, "user");
 
-                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_Korea));
+                Bundle bundle = new Bundle();
+                bundle.putLong("time", System.currentTimeMillis());
+                bundle.putString("key", "time");
+                firebaseAnalytics.logEvent("click_Res_type_" + st_str_type_Korea, bundle);
+
+                startActivity(new Intent(context, ResType.class).putExtra("TYPE", st_str_type_Korea));
             }
         });
         italian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putLong("time",System.currentTimeMillis());
-                bundle.putString("key","time");
-                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_ltalian,bundle);
+                firebaseAnalytics.setUserId("user_" + st_str_type_ltalian);
+                firebaseAnalytics.setUserProperty("user_" + st_str_type_ltalian, "user");
 
-                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_ltalian));
+                Bundle bundle = new Bundle();
+                bundle.putLong("time", System.currentTimeMillis());
+                bundle.putString("key", "time");
+                firebaseAnalytics.logEvent("click_Res_type_" + st_str_type_ltalian, bundle);
+
+                startActivity(new Intent(context, ResType.class).putExtra("TYPE", st_str_type_ltalian));
             }
         });
         ds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putLong("time",System.currentTimeMillis());
-                bundle.putString("key","time");
-                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_DimSum,bundle);
+                firebaseAnalytics.setUserId("user_" + st_str_type_DimSum);
+                firebaseAnalytics.setUserProperty("user_" + st_str_type_DimSum, "user");
 
-                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_DimSum));
+                Bundle bundle = new Bundle();
+                bundle.putLong("time", System.currentTimeMillis());
+                bundle.putString("key", "time");
+                firebaseAnalytics.logEvent("click_Res_type_" + st_str_type_DimSum, bundle);
+
+                startActivity(new Intent(context, ResType.class).putExtra("TYPE", st_str_type_DimSum));
             }
         });
         western.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putLong("time",System.currentTimeMillis());
-                bundle.putString("key","time");
-                firebaseAnalytics.logEvent("click_Res_type_"+ st_str_type_Western,bundle);
+                firebaseAnalytics.setUserId("user_" + st_str_type_Western);
+                firebaseAnalytics.setUserProperty("user_" + st_str_type_Western, "user");
 
-                startActivity(new Intent(context,ResType.class).putExtra("TYPE",st_str_type_Western));
+                Bundle bundle = new Bundle();
+                bundle.putLong("time", System.currentTimeMillis());
+                bundle.putString("key", "time");
+                firebaseAnalytics.logEvent("click_Res_type_" + st_str_type_Western, bundle);
+
+                startActivity(new Intent(context, ResType.class).putExtra("TYPE", st_str_type_Western));
             }
         });
 
+    }
+
+    private void adload() {
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                Bundle bundle = new Bundle();
+                bundle.putLong("time", System.currentTimeMillis());
+                bundle.putString("Close_ad", "time");
+                firebaseAnalytics.logEvent("Close_AD_IT", bundle);
+                // Code to be executed when the interstitial ad is closed.
+            }
+        });
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                Bundle bundle = new Bundle();
+                bundle.putLong("time", System.currentTimeMillis());
+                bundle.putString("Close_ad", "time");
+                firebaseAnalytics.logEvent("Close_AD_IT", bundle);
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+
+        });
     }
 
     private void read() {
@@ -355,7 +480,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         if (st_str_account.length() > 3) {
             username.setText(st_str_account);
-        }else{
+        } else {
             username.setText("GUEST");
         }
         mToggle.syncState();
@@ -363,7 +488,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         navigationView.getMenu().findItem(R.id.homepage).setVisible(false);
         navigationView.getMenu().findItem(R.id.mlkit).setVisible(true);
         bottomNavigationView = findViewById(R.id.btm_nav_bar);
-        bottomNavigationView.getMenu().findItem(R.id.nav_home).setEnabled(false).setChecked(true).setIcon(R.drawable.ic_home_black_24dp);
+        bottomNavigationView.getMenu().findItem(R.id.nav_home).setEnabled(true).setChecked(false).setIcon(R.drawable.ic_home_black_24dp);
 
 
         navigationView.getMenu().findItem(R.id.login).setVisible(true);
@@ -400,10 +525,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         switch (item.getItemId()) {
             case R.id.nav_social:
                 Bundle bundle = new Bundle();
-                bundle.putLong("time",System.currentTimeMillis());
-                bundle.putString("key","time");
-                firebaseAnalytics.logEvent("click_soical",bundle);
-startActivity(new Intent(Home.this,Social.class));
+                bundle.putLong("time", System.currentTimeMillis());
+                bundle.putString("key", "time");
+                firebaseAnalytics.logEvent("click_soical", bundle);
+                startActivity(new Intent(Home.this, Social.class));
 
                 break;
             case R.id.signup:
@@ -414,9 +539,9 @@ startActivity(new Intent(Home.this,Social.class));
                 break;
 
             case R.id.order:
-                if(st_str_accountID.length()<1){
-                    Toast.makeText(Home.this,"You need login to use this function",Toast.LENGTH_SHORT).show();
-                }else {
+                if (st_str_accountID.length() < 1) {
+                    Toast.makeText(Home.this, "You need login to use this function", Toast.LENGTH_SHORT).show();
+                } else {
                     startActivity(new Intent(Home.this, Order.class));
                 }
                 break;
@@ -424,13 +549,25 @@ startActivity(new Intent(Home.this,Social.class));
                 st_str_account = "";
                 st_str_level = "GUEST";
                 st_str_accountID = "";
-                Toast.makeText(Home.this,"Logout",Toast.LENGTH_SHORT).show();
-                FirebaseAuth.getInstance().signOut();
-                reload();
+                if(mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                    adload();
+                    Toast.makeText(Home.this, "Logout", Toast.LENGTH_SHORT).show();
+                    FirebaseAuth.getInstance().signOut();
+                    reload();
+                }else{
+                    Toast.makeText(Home.this, "Logout", Toast.LENGTH_SHORT).show();
+                    FirebaseAuth.getInstance().signOut();
+                    reload();
+                }
 
                 break;
             case R.id.mlkit:
-                startActivity(new Intent(context,ShowRes.class));
+                Bundle bundle1 = new Bundle();
+                bundle1.putLong("Time", System.currentTimeMillis());
+                bundle1.putString("Click_MLKIT_TIME", "time");
+                firebaseAnalytics.logEvent("click_MLKIT", bundle1);
+                startActivity(new Intent(context, ShowRes.class));
                 break;
 
         }
@@ -448,8 +585,6 @@ startActivity(new Intent(Home.this,Social.class));
         finish();
         startActivity(i);
     }
-
-
 
 
 }
